@@ -2,7 +2,10 @@ package com.gjj.nmcbackend.model.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
+
+import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
 
@@ -12,11 +15,11 @@ import lombok.Data;
  */
 @TableName(value ="user")
 @Data
-public class User {
+public class User implements Serializable {
     /**
      * id
      */
-    @TableId(type = IdType.AUTO)
+    @TableId(type = IdType.ASSIGN_ID)
     private Long id;
 
     /**
@@ -60,11 +63,6 @@ public class User {
     private Integer userStatus;
 
     /**
-     * 逻辑删除标识:0-未删除;1-已删除
-     */
-    private Integer isDeleted;
-
-    /**
      * 创建时间
      */
     private Date createTime;
@@ -73,4 +71,13 @@ public class User {
      * 更新时间
      */
     private Date updateTime;
+
+    /**
+     * 逻辑删除标识:0-未删除;1-已删除
+     */
+    @TableLogic
+    private Integer isDeleted;
+
+    private static final long serialVersionUID = 8387799304491590864L;
+
 }

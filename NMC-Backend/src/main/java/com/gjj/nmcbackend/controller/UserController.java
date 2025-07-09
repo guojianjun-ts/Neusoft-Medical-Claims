@@ -44,8 +44,11 @@ public class UserController {
     }
 
     @GetMapping("/get/login")
+    // 获取登录用户
     public BaseResponse<LoginUserVO> getLoginUser(HttpServletRequest request) {
+        // 调用userService的getLoginUser方法，获取登录用户
         User user = userService.getLoginUser(request);
+        // 调用userService的getLoginUserVO方法，将用户信息转换为LoginUserVO对象
         return ResultUtils.success(userService.getLoginUserVO(user));
     }
 

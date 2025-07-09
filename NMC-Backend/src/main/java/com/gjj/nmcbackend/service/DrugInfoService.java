@@ -33,12 +33,12 @@ public interface DrugInfoService extends IService<DrugInfo> {
      * 获取所有药品的ID列表
      * @return 药品ID列表
      */
-    //List<Long> listAllDrugInfoIds();
+    List<Long> listAllDrugInfoIds();
 
     /**
      * 批量删除药品信息
      * @param ids 药品ID列表
      * @return 是否删除成功
      */
-    //boolean deleteDrugInfoByIds(List<Long> ids);
+    boolean deleteDrugInfoByIds(List<Long> ids);
 }

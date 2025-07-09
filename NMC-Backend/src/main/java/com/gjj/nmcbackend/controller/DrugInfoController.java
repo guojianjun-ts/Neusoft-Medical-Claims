@@ -1,8 +1,8 @@
 package com.gjj.nmcbackend.controller;
 
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.gjj.nmcbackend.annotion.UserAuthCheck;
 import com.gjj.nmcbackend.common.BaseResponse;
 import com.gjj.nmcbackend.common.ResultUtils;
 import com.gjj.nmcbackend.exception.ErrorCode;
@@ -27,6 +27,7 @@ public class DrugInfoController {
      * @param addDrugInfoRequest 药品信息
      * @return 添加结果
      */
+    @UserAuthCheck
     @PostMapping("/add")
     public BaseResponse<Long> addDrugInfo(@RequestBody DrugInfo addDrugInfoRequest) {
         ThrowUtils.throwIf(addDrugInfoRequest == null , ErrorCode.PARAMS_ERROR);
@@ -40,6 +41,7 @@ public class DrugInfoController {
      * @param id 药品ID
      * @return 删除结果
      */
+    @UserAuthCheck
     @DeleteMapping("/delete/{id}")
     public BaseResponse<Boolean> deleteDrugInfo(@PathVariable Long id) {
         // 1. 校验参数
@@ -60,6 +62,7 @@ public class DrugInfoController {
      * @param drugInfo 药品信息
      * @return 修改结果
      */
+    @UserAuthCheck
     @PutMapping("/update")
     public BaseResponse<Boolean> updateDrugInfo(@RequestBody DrugInfo drugInfo) {
         ThrowUtils.throwIf(drugInfo == null , ErrorCode.PARAMS_ERROR);
@@ -73,6 +76,7 @@ public class DrugInfoController {
      * @param chineseName 药品名称
      * @return 药品信息列表
      */
+    @UserAuthCheck
     @GetMapping("/getByName")
     public BaseResponse<List<DrugInfo>> getDrugInfoByName(@RequestParam String chineseName) {
         ThrowUtils.throwIf(StrUtil.isEmpty(chineseName) , ErrorCode.PARAMS_ERROR);
@@ -87,10 +91,25 @@ public class DrugInfoController {
      * @param size 每页大小
      * @return 分页结果
      */
+    @UserAuthCheck
     @GetMapping("/list/page")
     public BaseResponse<Page<DrugInfo>> listDrugInfoByPage(@RequestParam(defaultValue = "1") long current
             , @RequestParam(defaultValue = "10") long size) {
         Page<DrugInfo> page = drugInfoService.listDrugInfoByPage(current , size);
         return ResultUtils.success(page);
+    }
+
+    /**
+     * 批量删除药品信息
+     * @param ids 药品ID列表
+     * @return 删除结果
+     */
+    @UserAuthCheck
+    @DeleteMapping("/delete/batch")
+    public BaseResponse<Boolean> deleteDrugInfoByIds(@RequestBody List<Long> ids) {
+
+        ThrowUtils.throwIf(ids == null || ids.isEmpty() , ErrorCode.PARAMS_ERROR , "药品ID列表不能为空");
+        boolean result = drugInfoService.deleteDrugInfoByIds(ids);
+        return ResultUtils.success(result);
     }
 }

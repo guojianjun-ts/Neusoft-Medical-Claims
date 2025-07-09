@@ -8,7 +8,9 @@ import com.gjj.nmcbackend.service.DrugInfoService;
 import com.gjj.nmcbackend.mapper.DrugInfoMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
 * @author 78568
@@ -30,6 +32,18 @@ public class DrugInfoServiceImpl extends ServiceImpl<DrugInfoMapper, DrugInfo>
     public Page<DrugInfo> listDrugInfoByPage(long current, long size) {
         Page<DrugInfo> page = new Page<>(current, size);
         return this.page(page);
+    }
+
+    @Override
+    public List<Long> listAllDrugInfoIds() {
+        return this.list().stream()
+                .map(DrugInfo::getId)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean deleteDrugInfoByIds(List<Long> ids) {
+        return this.removeByIds(ids);
     }
 }
 

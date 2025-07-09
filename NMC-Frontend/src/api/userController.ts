@@ -1,0 +1,41 @@
+// @ts-ignore
+/* eslint-disable */
+import request from '@/request'
+
+/** getLoginUser GET /api/user/get/login */
+export async function getLoginUserUsingGet(options?: { [key: string]: any }) {
+  return request<API.BaseResponseLoginUserVO_>('/api/user/get/login', {
+    method: 'GET',
+    ...(options || {}),
+  })
+}
+
+/** userLogin POST /api/user/login */
+export async function userLoginUsingPost(
+  body: API.UserLoginRequest,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponseLoginUserVO_>('/api/user/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  })
+}
+
+/** userRegister POST /api/user/register */
+export async function userRegisterUsingPost(
+  body: API.UserRegisterRequest,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponseLong_>('/api/user/register', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  })
+}

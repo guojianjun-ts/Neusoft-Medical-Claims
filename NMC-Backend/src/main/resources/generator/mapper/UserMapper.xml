@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gjj.nmcbackend.mapper.UserMapper">
+
+    <resultMap id="BaseResultMap" type="com.gjj.nmcbackend.model.entity.User">
+            <id property="id" column="id" />
+            <result property="userAccount" column="userAccount" />
+            <result property="userPassword" column="userPassword" />
+            <result property="userName" column="userName" />
+            <result property="userAvatar" column="userAvatar" />
+            <result property="gender" column="Gender" />
+            <result property="mobile" column="Mobile" />
+            <result property="email" column="Email" />
+            <result property="userStatus" column="userStatus" />
+            <result property="isDeleted" column="isDeleted" />
+            <result property="createTime" column="createTime" />
+            <result property="updateTime" column="updateTime" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,userAccount,userPassword,userName,userAvatar,Gender,
+        Mobile,Email,userStatus,isDeleted,createTime,
+        updateTime
+    </sql>
+</mapper>

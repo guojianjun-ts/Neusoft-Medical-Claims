@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS `diagnosis_treatment` (
   `treatmentPrice` decimal(10,2) DEFAULT NULL COMMENT '价格',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`),
-  KEY `idx_treatmentName` (`treatmentName`),
+  KEY `idx_treatmentName` (`treatmentName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='诊疗项目表';
 
 INSERT INTO `diagnosis_treatment` VALUES ('298', 'G', '300000000/1', '453300000010000-300000000/1', '使用膀胱镜加收', '', '', '台次', '180.00', '');

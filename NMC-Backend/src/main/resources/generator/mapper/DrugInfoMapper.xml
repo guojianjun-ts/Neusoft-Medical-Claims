@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gjj.nmcbackend.mapper.DrugInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.gjj.nmcbackend.model.entity.DrugInfo">
+            <id property="id" column="id" />
+            <result property="insuranceType" column="insuranceType" />
+            <result property="chinaName" column="chinaName" />
+            <result property="goodsName" column="goodsName" />
+            <result property="specifications" column="specifications" />
+            <result property="drugUnit" column="drugUnit" />
+            <result property="drugManufacturer" column="drugManufacturer" />
+            <result property="drugPrice" column="drugPrice" />
+            <result property="remarks" column="remarks" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,insuranceType,chinaName,goodsName,specifications,drugUnit,
+        drugManufacturer,drugPrice,remarks
+    </sql>
+</mapper>

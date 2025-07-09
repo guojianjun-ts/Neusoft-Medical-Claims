@@ -1,17 +1,19 @@
-CREATE TABLE IF NOT EXISTS `medical_service` (
-  `id` int NOT NULL AUTO_INCREMENT COMMENT '医疗服务 ID',
-  `serviceType` varchar(10) DEFAULT NULL COMMENT '医疗服务类别',
-  `serviceNumber` varchar(25) DEFAULT NULL COMMENT '医疗服务编码',
-  `countryNumber` varchar(100) DEFAULT NULL COMMENT '医疗服务国家编码',
-  `serviceName` varchar(255) DEFAULT NULL COMMENT '医疗服务名称',
-  `serviceInfo` varchar(255) DEFAULT NULL COMMENT '医疗服务说明',
-  `serviceExclude` varchar(255) DEFAULT NULL COMMENT '除外内容',
-  `serviceUnit` varchar(10) DEFAULT NULL COMMENT '计价单位',
-  `servicePrice` decimal(10,2) DEFAULT NULL COMMENT '价格',
-  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
-  PRIMARY KEY (`id`),
-  KEY `idx_medicalName` (`serviceName`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='医疗服务设施表';
+CREATE TABLE IF NOT EXISTS `medical_service`
+(
+    `id`             int NOT NULL AUTO_INCREMENT COMMENT '医疗服务 ID',
+    `serviceType`    varchar(10)    DEFAULT NULL COMMENT '医疗服务类别',
+    `serviceNumber`  varchar(25)    DEFAULT NULL COMMENT '医疗服务编码',
+    `countryNumber`  varchar(100)   DEFAULT NULL COMMENT '医疗服务国家编码',
+    `serviceName`    varchar(255)   DEFAULT NULL COMMENT '医疗服务名称',
+    `serviceInfo`    varchar(255)   DEFAULT NULL COMMENT '医疗服务说明',
+    `serviceExclude` varchar(255)   DEFAULT NULL COMMENT '除外内容',
+    `serviceUnit`    varchar(10)    DEFAULT NULL COMMENT '计价单位',
+    `servicePrice`   decimal(10, 2) DEFAULT NULL COMMENT '价格',
+    `remark`         varchar(255)   DEFAULT NULL COMMENT '备注',
+    PRIMARY KEY (`id`),
+    KEY `idx_medicalName` (`serviceName`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='医疗服务设施表';
 
 
 INSERT INTO `medical_service` VALUES ('2', 'C', '110200001-1', '001102000010300-110200001-1', '门诊诊查费(医师)', '指医护人员提供(技术劳务)的诊疗服务', '', '次', '3.00', '');

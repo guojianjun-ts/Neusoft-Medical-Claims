@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gjj.nmcbackend.mapper.MedicalServiceMapper">
+
+    <resultMap id="BaseResultMap" type="com.gjj.nmcbackend.model.entity.MedicalService">
+            <id property="id" column="id" />
+            <result property="serviceType" column="serviceType" />
+            <result property="serviceNumber" column="serviceNumber" />
+            <result property="countryNumber" column="countryNumber" />
+            <result property="serviceName" column="serviceName" />
+            <result property="serviceInfo" column="serviceInfo" />
+            <result property="serviceExclude" column="serviceExclude" />
+            <result property="serviceUnit" column="serviceUnit" />
+            <result property="servicePrice" column="servicePrice" />
+            <result property="remark" column="remark" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,serviceType,serviceNumber,countryNumber,serviceName,serviceInfo,
+        serviceExclude,serviceUnit,servicePrice,remark
+    </sql>
+</mapper>

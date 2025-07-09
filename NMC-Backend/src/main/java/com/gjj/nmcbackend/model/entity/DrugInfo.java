@@ -3,6 +3,8 @@ package com.gjj.nmcbackend.model.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
+import java.io.Serializable;
 import java.math.BigDecimal;
 import lombok.Data;
 
@@ -12,7 +14,7 @@ import lombok.Data;
  */
 @TableName(value ="drug_info")
 @Data
-public class DrugInfo {
+public class DrugInfo implements Serializable {
     /**
      * ID
      */
@@ -27,7 +29,7 @@ public class DrugInfo {
     /**
      * 药品名称
      */
-    private String chinaName;   
+    private String chinaName;
 
     /**
      * 品名
@@ -58,4 +60,7 @@ public class DrugInfo {
      * 备注
      */
     private String remarks;
+
+    private static final long serialVersionUID = 7014052787054974740L;
+
 }

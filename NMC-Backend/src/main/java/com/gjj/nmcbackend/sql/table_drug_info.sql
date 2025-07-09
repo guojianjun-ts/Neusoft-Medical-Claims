@@ -1,9 +1,8 @@
 -- 2.药品信息维护表
-DROP TABLE IF EXISTS `drug_info`;
 
 CREATE TABLE IF NOT EXISTS `drug_info`
 (
-    `id`               bigint NOT NULL AUTO_INCREMENT COMMENT 'ID',
+    `id`               bigint NOT NULL AUTO_INCREMENT COMMENT '药品 ID',
     `insuranceType`    varchar(10)    DEFAULT NULL COMMENT '药品类型',
     `chinaName`        varchar(255)   DEFAULT NULL COMMENT '药品名称',
     `goodsName`        varchar(255)   DEFAULT NULL COMMENT '品名',

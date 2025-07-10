@@ -25,14 +25,6 @@ export async function userLoginUsingPost(
   })
 }
 
-/** userLogout POST /api/user/logout */
-export async function userLogoutUsingPost(options?: { [key: string]: any }) {
-  return request<API.BaseResponseBoolean_>('/api/user/logout', {
-    method: 'POST',
-    ...(options || {}),
-  })
-}
-
 /** userRegister POST /api/user/register */
 export async function userRegisterUsingPost(
   body: API.UserRegisterRequest,

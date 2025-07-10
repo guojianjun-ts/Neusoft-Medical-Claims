@@ -143,7 +143,6 @@ declare namespace API {
     userAvatar?: string
     userName?: string
     userProfile?: string
-    userStatus?: number
   }
 
   type MedicalService = {

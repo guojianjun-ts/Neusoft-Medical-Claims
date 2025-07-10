@@ -4,7 +4,6 @@
       <MedicalInfoSideMenu />
     </a-layout-sider>
     <a-layout-content>
-      <!-- 内容 -->
 
     </a-layout-content>
   </a-layout>

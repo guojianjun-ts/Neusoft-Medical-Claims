@@ -3,7 +3,7 @@
     id="medicalInfoSideMenu"
     v-model:openKeys="openKeys"
     v-model:selectedKeys="selectedKeys"
-    style="width: 256px"
+    style="width: 200px; height: calc(100vh - 64px); position: fixed;"
     mode="inline"
     :items="items"
     @click="handleClick"
@@ -38,15 +38,15 @@ function getItem(
 
 const items: ItemType[] = reactive([
   getItem('数据信息维护', 'sub1', () => h(DatabaseOutlined), [
-    getItem('医保药品数据维护', '1', undefined, undefined, undefined, () => router.push('/info-management/drug')),
-    getItem('诊疗项目数据维护', '2', undefined, undefined, undefined, () => router.push('/info-management/treatment')),
-    getItem('医疗服务设施数据维护', '3', undefined, undefined, undefined, () => router.push('/info-management/facility')),
+    getItem('医保药品数据维护', '1'),
+    getItem('诊疗项目数据维护', '2'),
+    getItem('医疗服务设施数据维护', '3'),
   ]),
   getItem('报销比例维护', 'sub2', () => h(PercentageOutlined), [
-    getItem('药品报销比例', '4', undefined, undefined, undefined, () => router.push('/info-management/drug-reimbursement')),
-    getItem('三级医院报销比例', '5', undefined, undefined, undefined, () => router.push('/info-management/tertiary-reimbursement')),
-    getItem('二级医院报销比例', '6', undefined, undefined, undefined, () => router.push('/info-management/secondary-reimbursement')),
-    getItem('一级医院报销比例', '7', undefined, undefined, undefined, () => router.push('/info-management/primary-reimbursement')),
+    getItem('药品报销比例', '4'),
+    getItem('三级医院报销比例', '5'),
+    getItem('二级医院报销比例', '6'),
+    getItem('一级医院报销比例', '7'),
   ]),
 ]);
 
@@ -82,3 +82,23 @@ watch(openKeys, (val) => {
   console.log('openKeys', val);
 });
 </script>
+
+<style scoped>
+#medicalInfoSideMenu {
+  border-inline-end: none !important;
+}
+
+#medicalInfoSideMenu :deep(.ant-menu-item) {
+  padding-left: 16px !important;
+  margin: 0;
+}
+
+#medicalInfoSideMenu :deep(.ant-menu-submenu-title) {
+  padding-left: 16px !important;
+  margin: 0;
+}
+
+#medicalInfoSideMenu :deep(.ant-menu-sub) {
+  padding-left: 0 !important;
+}
+</style>

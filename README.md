@@ -29,7 +29,7 @@
    2. deleteDrugInfo（删除）:ok:
    3. updateDrugInfo（修改）:ok:
    4. getDrugInfoByName（根据`chineseName`查询药品信息）:ok:
-   5. listDrugInfoByPage（分页获取药品信息）
+   5. listDrugInfoByPage（分页获取药品信息）:ok:
    
       1. 开发时，这里有`bug` 
    

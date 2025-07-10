@@ -42,8 +42,13 @@ const items = ref<MenuProps['items']>([
   {
     key: '/',
     icon: () => h(HomeOutlined),
-    label: '主页',
-    title: '主页',
+    label: '首页',
+    title: '首页',
+  },
+  {
+    key: '/info-management',
+    label: '医疗保险基本信息维护',
+    title: '医疗保险基本信息维护',
   },
   {
     key: '/about',
@@ -83,4 +88,3 @@ router.afterEach((to) => {
   height: 48px;
 }
 </style>
-

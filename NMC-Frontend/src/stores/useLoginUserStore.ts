@@ -7,6 +7,12 @@ export const useLoginUserStore = defineStore("loginUser", () => {
     userName: '未登录',
   })
 
+  // 新增布局状态
+  const layoutState = ref({
+    showSidebar: true,
+    showHeader: true,
+    showFooter: true
+  })
 
   async function fetchLoginUser() {
     const res = await getLoginUserUsingGet()
@@ -15,11 +21,20 @@ export const useLoginUserStore = defineStore("loginUser", () => {
     }
   }
 
-
   function setLoginUser(newLoginUser: any) {
     loginUser.value = newLoginUser;
   }
 
-  return { loginUser, setLoginUser, fetchLoginUser };
-});
+  // 新增布局控制方法
+  function setLayoutState(state: Partial<typeof layoutState.value>) {
+    layoutState.value = { ...layoutState.value, ...state }
+  }
 
+  return {
+    loginUser,
+    setLoginUser,
+    fetchLoginUser,
+    layoutState,
+    setLayoutState
+  };
+});

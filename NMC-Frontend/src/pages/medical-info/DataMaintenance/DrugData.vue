@@ -197,8 +197,8 @@ const currentDrug = reactive<API.DrugInfo>({
   goodsName: '',
   specifications: '',
   drugUnit: '盒',
-  drugPrice: undefined,
   drugManufacturer: '',
+  drugPrice: undefined,
   remarks: ''
 })
 

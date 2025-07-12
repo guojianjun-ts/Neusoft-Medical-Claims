@@ -228,8 +228,6 @@ const formRules = reactive({
   serviceNumber: [{ required: true, message: '请输入项目编码' }],
   countryNumber: [{ required: true, message: '请输入项目国家编码' }],
   serviceName: [{ required: true, message: '请输入项目名称' }],
-  serviceInfo: [{ required: true, message: '请输入项目说明' }],
-  serviceExclude: [{ required: true, message: '请输入除外内容' }],
   serviceUnit: [{ required: true, message: '请选择计价单位' }],
   servicePrice: [
     { required: true, message: '请输入价格' },

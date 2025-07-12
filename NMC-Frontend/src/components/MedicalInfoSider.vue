@@ -30,21 +30,21 @@
         <template #title>
           <span>报销比例维护</span>
         </template>
-        <a-menu-item key="/medical-info/drug-reimbursement" @click="navigateTo('/medical-info/drug-reimbursement')">
+        <a-menu-item key="/medical-info/drug-reimbursement" @click="navigateTo('/medical-info/drug-rates')">
           <template #icon><MedicineBoxOutlined /></template>
           药品报销比例
         </a-menu-item>
-        <a-menu-item key="/medical-info/hospital-level3" @click="navigateTo('/medical-info/hospital-level3')">
+        <a-menu-item key="/medical-info/level1-rates" @click="navigateTo('/medical-info/level1-rates')">
           <template #icon><BankOutlined /></template>
-          三级医院报销比例
+          一级医院报销比例
         </a-menu-item>
-        <a-menu-item key="/medical-info/hospital-level2" @click="navigateTo('/medical-info/hospital-level2')">
+        <a-menu-item key="/medical-info/level2-rates" @click="navigateTo('/medical-info/level2-rates')">
           <template #icon><BankOutlined /></template>
           二级医院报销比例
         </a-menu-item>
-        <a-menu-item key="/medical-info/hospital-level1" @click="navigateTo('/medical-info/hospital-level1')">
+        <a-menu-item key="/medical-info/level3-rates" @click="navigateTo('/medical-info/level3-rates')">
           <template #icon><BankOutlined /></template>
-          一级医院报销比例
+          三级医院报销比例
         </a-menu-item>
       </a-sub-menu>
     </a-menu>

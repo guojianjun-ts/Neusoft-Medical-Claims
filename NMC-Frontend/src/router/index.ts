@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 // 医疗基本信息维护模块
 const DrugData = () => import('@/pages/medical-info/DataMaintenance/DrugData.vue')
-const TreatmentItems = () => import('@/pages/medical-info/DataMaintenance/TreatmentItems.vue')
+const TreatmentItems = () => import('@/pages/medical-info/DataMaintenance/DiagnosisTreatment.vue')
 const MedicalServices = () => import('@/pages/medical-info/DataMaintenance/MedicalServices.vue')
 const DrugRates = () => import('@/pages/medical-info/ReimbursementRates/DrugRates.vue')
 const Level3Hospital = () => import('@/pages/medical-info/ReimbursementRates/Level3Hospital.vue')

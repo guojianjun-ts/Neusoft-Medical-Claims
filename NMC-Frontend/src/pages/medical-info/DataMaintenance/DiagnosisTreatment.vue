@@ -1,9 +1,9 @@
 <template>
-  <div id="medicalServiceManagePage">
+  <div id="diagnosisTreatmentManagePage">
     <!-- 搜索表单 -->
     <a-form layout="inline" :model="searchParams" @finish="doSearch">
-      <a-form-item label="医疗服务名称">
-        <a-input v-model:value="searchParams.serviceName" placeholder="输入医疗服务名称" allow-clear />
+      <a-form-item label="诊疗项目名称">
+        <a-input v-model:value="searchParams.treatmentName" placeholder="输入诊疗项目名称" allow-clear />
       </a-form-item>
       <a-form-item>
         <a-button type="primary" html-type="submit">搜索</a-button>
@@ -15,7 +15,7 @@
     <div style="margin-bottom: 16px">
       <a-space>
         <a-button type="primary" @click="showAddModal">
-          <plus-outlined /> 增加服务
+          <plus-outlined /> 增加项目
         </a-button>
         <a-button danger :disabled="!selectedRowKeys.length" @click="handleBatchDelete">
           <delete-outlined /> 批量删除
@@ -35,12 +35,12 @@
       class="no-wrap-header"
     >
       <template #bodyCell="{ column, record }">
-        <template v-if="column.dataIndex === 'servicePrice'">
-          ¥ {{ record.servicePrice?.toFixed(2) }}
+        <template v-if="column.dataIndex === 'treatmentPrice'">
+          ¥ {{ record.treatmentPrice?.toFixed(2) }}
         </template>
-        <template v-else-if="column.dataIndex === 'serviceType'">
-          <a-tag :color="getServiceTypeColor(record.serviceType)">
-            {{ record.serviceType }}
+        <template v-else-if="column.dataIndex === 'treatmentType'">
+          <a-tag :color="getTreatmentTypeColor(record.treatmentType)">
+            {{ record.treatmentType }}
           </a-tag>
         </template>
         <template v-else-if="column.key === 'action'">
@@ -63,13 +63,13 @@
     >
       <a-form
         ref="formRef"
-        :model="currentService"
+        :model="currentTreatment"
         :label-col="{ span: 6 }"
         :wrapper-col="{ span: 16 }"
         :rules="formRules"
       >
-        <a-form-item label="项目类别" name="serviceType">
-          <a-select v-model:value="currentService.serviceType" placeholder="请选择项目类别">
+        <a-form-item label="项目类别" name="treatmentType">
+          <a-select v-model:value="currentTreatment.treatmentType" placeholder="请选择项目类别">
             <a-select-option value="C">C</a-select-option>
             <a-select-option value="D">D</a-select-option>
             <a-select-option value="I">I</a-select-option>
@@ -77,23 +77,23 @@
             <a-select-option value="F">F</a-select-option>
           </a-select>
         </a-form-item>
-        <a-form-item label="项目编码" name="serviceNumber">
-          <a-input v-model:value="currentService.serviceNumber" placeholder="请输入项目编码" />
+        <a-form-item label="项目编码" name="treatmentNumber">
+          <a-input v-model:value="currentTreatment.treatmentNumber" placeholder="请输入项目编码" />
         </a-form-item>
         <a-form-item label="项目国家编码" name="countryNumber">
-          <a-input v-model:value="currentService.countryNumber" placeholder="请输入项目国家编码" />
+          <a-input v-model:value="currentTreatment.countryNumber" placeholder="请输入项目国家编码" />
         </a-form-item>
-        <a-form-item label="项目名称" name="serviceName">
-          <a-input v-model:value="currentService.serviceName" placeholder="请输入项目名称" />
+        <a-form-item label="项目名称" name="treatmentName">
+          <a-input v-model:value="currentTreatment.treatmentName" placeholder="请输入项目名称" />
         </a-form-item>
-        <a-form-item label="项目说明" name="serviceInfo">
-          <a-input v-model:value="currentService.serviceInfo" placeholder="请输入项目说明" />
+        <a-form-item label="项目说明" name="treatmentInfo">
+          <a-input v-model:value="currentTreatment.treatmentInfo" placeholder="请输入项目说明" />
         </a-form-item>
-        <a-form-item label="除外内容" name="serviceExclude">
-          <a-input v-model:value="currentService.serviceExclude" placeholder="请输入除外内容" />
+        <a-form-item label="除外内容" name="treatmentExclude">
+          <a-input v-model:value="currentTreatment.treatmentExclude" placeholder="请输入除外内容" />
         </a-form-item>
-        <a-form-item label="计价单位" name="serviceUnit">
-          <a-select v-model:value="currentService.serviceUnit" placeholder="请选择计价单位">
+        <a-form-item label="计价单位" name="treatmentUnit">
+          <a-select v-model:value="currentTreatment.treatmentUnit" placeholder="请选择计价单位">
             <a-select-option value="盒">盒</a-select-option>
             <a-select-option value="瓶">瓶</a-select-option>
             <a-select-option value="袋">袋</a-select-option>
@@ -101,9 +101,9 @@
             <a-select-option value="片">片</a-select-option>
           </a-select>
         </a-form-item>
-        <a-form-item label="价格" name="servicePrice">
+        <a-form-item label="价格" name="treatmentPrice">
           <a-input-number
-            v-model:value="currentService.servicePrice"
+            v-model:value="currentTreatment.treatmentPrice"
             :min="0"
             :precision="2"
             style="width: 100%"
@@ -111,7 +111,7 @@
           />
         </a-form-item>
         <a-form-item label="备注" name="remark">
-          <a-textarea v-model:value="currentService.remark" placeholder="请输入备注" :rows="3" />
+          <a-textarea v-model:value="currentTreatment.remark" placeholder="请输入备注" :rows="3" />
         </a-form-item>
       </a-form>
     </a-modal>
@@ -123,12 +123,12 @@ import { ref, reactive, computed, onMounted } from 'vue'
 import { message, type FormInstance } from 'ant-design-vue'
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons-vue'
 import {
-  listMedicalServiceByPageUsingGet,
-  addMedicalServiceUsingPost,
-  updateMedicalServiceUsingPut,
-  deleteMedicalServiceUsingDelete,
-  deleteMedicalServiceByIdsUsingDelete
-} from '@/api/medicalServiceController'
+  listDiagnosisTreatmentByPageUsingGet,
+  addDiagnosisTreatmentUsingPost,
+  updateDiagnosisTreatmentUsingPut,
+  deleteDiagnosisTreatmentUsingDelete,
+  deleteDiagnosisTreatmentByIdsUsingDelete
+} from '@/api/diagnosisTreatmentController'
 
 // 表格列配置
 const columns = [
@@ -140,12 +140,12 @@ const columns = [
   },
   {
     title: '项目类别',
-    dataIndex: 'serviceType',
+    dataIndex: 'treatmentType',
     width: 150,
   },
   {
     title: '项目编码',
-    dataIndex: 'serviceNumber',
+    dataIndex: 'treatmentNumber',
     width: 180
   },
   {
@@ -155,27 +155,27 @@ const columns = [
   },
   {
     title: '项目名称',
-    dataIndex: 'serviceName',
+    dataIndex: 'treatmentName',
     width: 240
   },
   {
     title: '项目说明',
-    dataIndex: 'serviceInfo',
+    dataIndex: 'treatmentInfo',
     width: 150
   },
   {
     title: '除外内容',
-    dataIndex: 'serviceExclude',
+    dataIndex: 'treatmentExclude',
     width: 150
   },
   {
     title: '计价单位',
-    dataIndex: 'serviceUnit',
+    dataIndex: 'treatmentUnit',
     width: 150
   },
   {
     title: '价格',
-    dataIndex: 'servicePrice',
+    dataIndex: 'treatmentPrice',
     width: 120,
     sorter: true
   },
@@ -196,40 +196,40 @@ const columns = [
 const searchParams = reactive({
   current: 1,
   pageSize: 10,
-  serviceName: undefined as string | undefined
+  treatmentName: undefined as string | undefined
 })
 
 // 数据列表
-const dataList = ref<API.MedicalService[]>([])
+const dataList = ref<API.DiagnosisTreatment[]>([])
 const total = ref(0)
 const selectedRowKeys = ref<number[]>([])
 const modalVisible = ref(false)
-const modalTitle = ref('增加服务')
+const modalTitle = ref('增加诊疗项目')
 const confirmLoading = ref(false)
 const formRef = ref<FormInstance>()
 
-// 当前操作的医疗服务数据
-const currentService = reactive<API.MedicalService>({
+// 当前操作的诊疗项目数据
+const currentTreatment = reactive<API.DiagnosisTreatment>({
   id: undefined,
-  serviceType: 'C',
-  serviceNumber: '',
+  treatmentType: 'C',
+  treatmentNumber: '',
   countryNumber: '',
-  serviceName: '',
-  serviceInfo: '',
-  serviceExclude: '',
-  serviceUnit: '盒',
-  servicePrice: undefined,
+  treatmentName: '',
+  treatmentInfo: '',
+  treatmentExclude: '',
+  treatmentUnit: '盒',
+  treatmentPrice: undefined,
   remark: ''
 })
 
 // 表单验证规则
 const formRules = reactive({
-  serviceType: [{ required: true, message: '请选择项目类别' }],
-  serviceNumber: [{ required: true, message: '请输入项目编码' }],
+  treatmentType: [{ required: true, message: '请选择项目类别' }],
+  treatmentNumber: [{ required: true, message: '请输入项目编码' }],
   countryNumber: [{ required: true, message: '请输入项目国家编码' }],
-  serviceName: [{ required: true, message: '请输入项目名称' }],
-  serviceUnit: [{ required: true, message: '请选择计价单位' }],
-  servicePrice: [
+  treatmentName: [{ required: true, message: '请输入项目名称' }],
+  treatmentUnit: [{ required: true, message: '请选择计价单位' }],
+  treatmentPrice: [
     { required: true, message: '请输入价格' },
     { type: 'number', min: 0, message: '价格必须大于0' }
   ]
@@ -246,7 +246,7 @@ const pagination = computed(() => ({
 }))
 
 // 获取项目类型标签颜色
-const getServiceTypeColor = (type: string) => {
+const getTreatmentTypeColor = (type: string) => {
   const colors: Record<string, string> = {
     'C': 'red',
     'D': 'orange',
@@ -263,10 +263,10 @@ const fetchData = async () => {
     const params = {
       current: searchParams.current,
       size: searchParams.pageSize,
-      serviceName: searchParams.serviceName || undefined // 传undefined会被过滤
+      treatmentName: searchParams.treatmentName || undefined // 传undefined会被过滤
     }
 
-    const res = await listMedicalServiceByPageUsingGet(params)
+    const res = await listDiagnosisTreatmentByPageUsingGet(params)
 
     if (res.data.data) {
       dataList.value = res.data.data.records || []
@@ -299,33 +299,33 @@ const onSelectChange = (selectedKeys: number[]) => {
 
 // 显示新增模态框
 const showAddModal = () => {
-  modalTitle.value = '增加医疗服务'
-  Object.assign(currentService, {
+  modalTitle.value = '增加诊疗项目'
+  Object.assign(currentTreatment, {
     id: undefined,
-    serviceType: 'C',
-    serviceNumber: '',
+    treatmentType: 'C',
+    treatmentNumber: '',
     countryNumber: '',
-    serviceName: '',
-    serviceInfo: '',
-    serviceExclude: '',
-    serviceUnit: '盒',
-    servicePrice: undefined,
+    treatmentName: '',
+    treatmentInfo: '',
+    treatmentExclude: '',
+    treatmentUnit: '盒',
+    treatmentPrice: undefined,
     remark: ''
   })
   modalVisible.value = true
 }
 
 // 编辑服务
-const handleEdit = (record: API.MedicalService) => {
-  modalTitle.value = '修改医疗服务'
-  Object.assign(currentService, JSON.parse(JSON.stringify(record)))
+const handleEdit = (record: API.DiagnosisTreatment) => {
+  modalTitle.value = '修改诊疗项目'
+  Object.assign(currentTreatment, JSON.parse(JSON.stringify(record)))
   modalVisible.value = true
 }
 
 // 删除服务
 const doDelete = async (id: number) => {
   try {
-    await deleteMedicalServiceUsingDelete({ id })
+    await deleteDiagnosisTreatmentUsingDelete({ id })
     message.success('删除成功')
     fetchData()
   } catch (error) {
@@ -342,7 +342,7 @@ const handleBatchDelete = async () => {
   }
 
   try {
-    await deleteMedicalServiceByIdsUsingDelete(selectedRowKeys.value)
+    await deleteDiagnosisTreatmentByIdsUsingDelete(selectedRowKeys.value)
     message.success('批量删除成功')
     selectedRowKeys.value = []
     fetchData()
@@ -359,13 +359,13 @@ const handleModalOk = async () => {
     confirmLoading.value = true
 
     const submitData = {
-      ...currentService,
-      servicePrice: Number(currentService.servicePrice)
+      ...currentTreatment,
+      treatmentPrice: Number(currentTreatment.treatmentPrice)
     }
 
-    if (currentService.id) {
+    if (currentTreatment.id) {
       // 更新操作
-      const success = await updateMedicalServiceUsingPut(submitData)
+      const success = await updateDiagnosisTreatmentUsingPut(submitData)
       if (success) {
         message.success('更新成功')
       } else {
@@ -374,7 +374,7 @@ const handleModalOk = async () => {
       }
     } else {
       // 新增操作
-      const success = await addMedicalServiceUsingPost(submitData)
+      const success = await addDiagnosisTreatmentUsingPost(submitData)
       if (success) {
         message.success('新增成功')
       } else {
@@ -407,7 +407,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-#medicalServiceManagePage {
+#diagnosisTreatmentManagePage {
   padding: 24px;
   background: #fff;
   border-radius: 4px;
@@ -417,5 +417,4 @@ onMounted(() => {
   margin-right: 16px;
   margin-bottom: 16px;
 }
-
 </style>

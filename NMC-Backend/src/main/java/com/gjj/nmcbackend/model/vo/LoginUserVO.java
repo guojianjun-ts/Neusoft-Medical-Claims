@@ -43,6 +43,11 @@ public class LoginUserVO implements Serializable {
      */
     private Date updateTime;
 
+    /**
+     * 用户状态：0-正常，1-禁用
+     */
+    private Integer userStatus;
+
     private static final long serialVersionUID = 1L;
 }
 

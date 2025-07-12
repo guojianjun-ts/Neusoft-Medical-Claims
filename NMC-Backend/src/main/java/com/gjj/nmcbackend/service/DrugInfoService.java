@@ -27,7 +27,7 @@ public interface DrugInfoService extends IService<DrugInfo> {
      * @param size 每页大小
      * @return 分页结果
      */
-    Page<DrugInfo> listDrugInfoByPage(long current, long size);
+    Page<DrugInfo> listDrugInfoByPage(long current, long size,String chinaName);
 
     /**
      * 获取所有药品的ID列表

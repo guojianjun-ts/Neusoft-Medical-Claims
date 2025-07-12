@@ -91,11 +91,13 @@ public class DrugInfoController {
      * @param size 每页大小
      * @return 分页结果
      */
-    @UserAuthCheck
     @GetMapping("/list/page")
-    public BaseResponse<Page<DrugInfo>> listDrugInfoByPage(@RequestParam(defaultValue = "1") long current
-            , @RequestParam(defaultValue = "10") long size) {
-        Page<DrugInfo> page = drugInfoService.listDrugInfoByPage(current , size);
+    public BaseResponse<Page<DrugInfo>> listDrugInfoByPage(
+            @RequestParam(defaultValue = "1") long current,
+            @RequestParam(defaultValue = "10") long size,
+            @RequestParam(required = false) String chinaName) {  // 添加可选搜索参数
+
+        Page<DrugInfo> page = drugInfoService.listDrugInfoByPage(current, size, chinaName);
         return ResultUtils.success(page);
     }
 

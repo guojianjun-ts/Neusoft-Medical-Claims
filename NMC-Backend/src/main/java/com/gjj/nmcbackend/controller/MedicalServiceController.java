@@ -94,8 +94,8 @@ public class MedicalServiceController {
     @UserAuthCheck
     @GetMapping("/list/page")
     public BaseResponse<Page<MedicalService>> listMedicalServiceByPage(@RequestParam(defaultValue = "1") long current
-            , @RequestParam(defaultValue = "10") long size) {
-        Page<MedicalService> page = medicalServiceService.listMedicalServiceByPage(current , size);
+            , @RequestParam(defaultValue = "10") long size, @RequestParam(required = false) String serviceName) {
+        Page<MedicalService> page = medicalServiceService.listMedicalServiceByPage(current , size , serviceName);
         return ResultUtils.success(page);
     }
 

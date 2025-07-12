@@ -93,8 +93,8 @@ public class DiagnosisTreatmentController {
     @UserAuthCheck
     @GetMapping("/list/page")
     public BaseResponse<Page<DiagnosisTreatment>> listDiagnosisTreatmentByPage(@RequestParam(defaultValue = "1") long current
-            , @RequestParam(defaultValue = "10") long size) {
-        Page<DiagnosisTreatment> page = diagnosisTreatmentService.listDiagnosisTreatmentByPage(current , size);
+            , @RequestParam(defaultValue = "10") long size,@RequestParam(required = false) String treatmentName) {
+        Page<DiagnosisTreatment> page = diagnosisTreatmentService.listDiagnosisTreatmentByPage(current , size, treatmentName);
         return ResultUtils.success(page);
     }
 

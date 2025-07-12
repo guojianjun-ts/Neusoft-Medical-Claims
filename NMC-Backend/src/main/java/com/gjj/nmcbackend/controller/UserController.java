@@ -43,6 +43,14 @@ public class UserController {
         return ResultUtils.success(loginUserVO);
     }
 
+    @PostMapping("/logout")
+    public BaseResponse<Boolean> userLogout(HttpServletRequest request) {
+        ThrowUtils.throwIf(request == null, ErrorCode.PARAMS_ERROR);
+        boolean result = userService.userLogout(request);
+        return ResultUtils.success(result);
+    }
+
+
     @GetMapping("/get/login")
     // 获取登录用户
     public BaseResponse<LoginUserVO> getLoginUser(HttpServletRequest request) {

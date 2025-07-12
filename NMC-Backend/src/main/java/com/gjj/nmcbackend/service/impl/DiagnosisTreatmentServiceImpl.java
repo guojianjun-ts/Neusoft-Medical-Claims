@@ -12,23 +12,23 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
-* @author 78568
-* @description 针对表【diagnosis_treatment(诊疗项目表)】的数据库操作Service实现
-* @createDate 2025-07-09 22:17:31
-*/
+ * @author 78568
+ * @description 针对表【diagnosis_treatment(诊疗项目表)】的数据库操作Service实现
+ * @createDate 2025-07-09 22:17:31
+ */
 @Service
 public class DiagnosisTreatmentServiceImpl extends ServiceImpl<DiagnosisTreatmentMapper, DiagnosisTreatment>
-    implements DiagnosisTreatmentService {
+        implements DiagnosisTreatmentService {
     @Override
     public List<DiagnosisTreatment> getDiagnosisTreatmentByName(String treatmentName) {
         LambdaQueryWrapper<DiagnosisTreatment> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.like(DiagnosisTreatment::getTreatmentName, treatmentName);
+        queryWrapper.like(DiagnosisTreatment::getTreatmentName , treatmentName);
         return this.list(queryWrapper);
     }
 
     @Override
-    public Page<DiagnosisTreatment> listDiagnosisTreatmentByPage(long current, long size) {
-        Page<DiagnosisTreatment> page = new Page<>(current, size);
+    public Page<DiagnosisTreatment> listDiagnosisTreatmentByPage(long current , long size , String treatmentName) {
+        Page<DiagnosisTreatment> page = new Page<>(current , size);
         return this.page(page);
     }
 

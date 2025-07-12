@@ -27,7 +27,7 @@ public interface MedicalServiceService extends IService<MedicalService> {
      * @param size 每页大小
      * @return 分页结果
      */
-    Page<MedicalService> listMedicalServiceByPage(long current, long size);
+    Page<MedicalService> listMedicalServiceByPage(long current, long size,String serviceName);
 
     /**
      * 获取所有药品的ID列表

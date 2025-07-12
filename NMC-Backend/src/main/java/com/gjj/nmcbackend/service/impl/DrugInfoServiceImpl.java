@@ -1,6 +1,7 @@
 package com.gjj.nmcbackend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gjj.nmcbackend.model.entity.DrugInfo;
@@ -28,10 +29,14 @@ public class DrugInfoServiceImpl extends ServiceImpl<DrugInfoMapper, DrugInfo>
         return this.list(queryWrapper);
     }
 
+    // Service层修改
     @Override
-    public Page<DrugInfo> listDrugInfoByPage(long current, long size) {
-        Page<DrugInfo> page = new Page<>(current, size);
-        return this.page(page);
+    public Page<DrugInfo> listDrugInfoByPage(long current, long size, String chinaName) {
+        LambdaQueryWrapper<DrugInfo> queryWrapper = new LambdaQueryWrapper<>();
+        if (StringUtils.isNotBlank(chinaName)) {
+            queryWrapper.like(DrugInfo::getChinaName, chinaName);
+        }
+        return this.page(new Page<>(current, size), queryWrapper);
     }
 
     @Override

@@ -119,9 +119,13 @@ declare namespace API {
     current?: number
     /** size */
     size?: number
+    /** treatmentName */
+    treatmentName?: string
   }
 
   type listDrugInfoByPageUsingGETParams = {
+    /** chinaName */
+    chinaName?: string
     /** current */
     current?: number
     /** size */
@@ -131,6 +135,8 @@ declare namespace API {
   type listMedicalServiceByPageUsingGETParams = {
     /** current */
     current?: number
+    /** serviceName */
+    serviceName?: string
     /** size */
     size?: number
   }

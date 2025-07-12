@@ -72,6 +72,7 @@ export async function listMedicalServiceByPageUsingGet(
     params: {
       // current has a default value: 1
       current: '1',
+
       // size has a default value: 10
       size: '10',
       ...params,

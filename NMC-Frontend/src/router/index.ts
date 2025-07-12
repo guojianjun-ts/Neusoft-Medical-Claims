@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import BasicLayout from '@/layouts/BasicLayout.vue'
 
 // 医疗基本信息维护模块
 const DrugData = () => import('@/pages/medical-info/DataMaintenance/DrugData.vue')
@@ -49,7 +48,7 @@ const routes = [
       // ====================== 医疗基本信息维护模块 ======================
       {
         path: 'medical-info',
-        meta: { title: '医疗基本信息维护' },
+        meta: { title: '信息维护' },
         children: [
           // 数据信息维护
           {
@@ -216,17 +215,16 @@ const router = createRouter({
 
 // 设置页面标题
 router.afterEach((to) => {
-  const titles = []
-  let parent = to.matched[to.matched.length - 1]
+  const titles = [];
 
-  while (parent) {
-    if (parent.meta.title) {
-      titles.unshift(parent.meta.title)
+  // 遍历所有匹配的路由记录
+  to.matched.forEach(record => {
+    if (record.meta?.title) {
+      titles.push(record.meta.title);
     }
-    parent = parent.parent
-  }
+  });
 
-  document.title = titles.join(' - ') || '医疗管理系统'
-})
+  document.title = titles.join(' - ') || '医疗管理系统';
+});
 
 export default router

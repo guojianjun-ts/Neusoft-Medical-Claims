@@ -1,6 +1,6 @@
 <template>
   <div>
-
+    这是诊疗服务页面
   </div>
 </template>
 

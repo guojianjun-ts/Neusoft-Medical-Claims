@@ -230,9 +230,7 @@ const getDrugTypeColor = (type: string) => {
   const colors: Record<string, string> = {
     '甲类': 'red',
     '乙类': 'orange',
-    '丙类': 'green',
-    '医保': 'blue',
-    '非医保': 'gray'
+    '丙类': 'green'
   }
   return colors[type] || 'purple'
 }

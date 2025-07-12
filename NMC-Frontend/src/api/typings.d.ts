@@ -23,6 +23,18 @@ declare namespace API {
     message?: string
   }
 
+  type BaseResponseListDrugReimbursement_ = {
+    code?: number
+    data?: DrugReimbursement[]
+    message?: string
+  }
+
+  type BaseResponseListHospitalReimbursementVO_ = {
+    code?: number
+    data?: HospitalReimbursementVO[]
+    message?: string
+  }
+
   type BaseResponseListMedicalService_ = {
     code?: number
     data?: MedicalService[]
@@ -69,7 +81,17 @@ declare namespace API {
     id: number
   }
 
+  type deleteDrugReimbursementUsingPOSTParams = {
+    /** id */
+    id: number
+  }
+
   type deleteMedicalServiceUsingDELETEParams = {
+    /** id */
+    id: number
+  }
+
+  type deleteUsingDELETEParams = {
     /** id */
     id: number
   }
@@ -99,6 +121,19 @@ declare namespace API {
     specifications?: string
   }
 
+  type DrugReimbursement = {
+    drugReimbursementInfo?: string
+    drugReimbursementProportion?: number
+    drugReimbursementType?: string
+    drugStatus?: number
+    id?: number
+  }
+
+  type getByLevelUsingGETParams = {
+    /** hospitalLevel */
+    hospitalLevel: string
+  }
+
   type getDiagnosisTreatmentByNameUsingGETParams = {
     /** chineseName */
     chineseName: string
@@ -112,6 +147,24 @@ declare namespace API {
   type getMedicalServiceByNameUsingGETParams = {
     /** chineseName */
     chineseName: string
+  }
+
+  type HospitalReimbursement = {
+    hospitalLevel?: string
+    id?: number
+    maxPayLevel?: number
+    minPayLevel?: number
+    payProportion?: number
+    peopleType?: number
+    status?: number
+  }
+
+  type HospitalReimbursementVO = {
+    id?: number
+    payRange?: string
+    peopleTypeDesc?: string
+    proportionDesc?: string
+    statusDesc?: string
   }
 
   type listDiagnosisTreatmentByPageUsingGETParams = {

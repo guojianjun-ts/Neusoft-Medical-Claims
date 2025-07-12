@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gjj.nmcbackend.mapper.DrugReimbursementMapper">
+
+    <resultMap id="BaseResultMap" type="com.gjj.nmcbackend.model.entity.DrugReimbursement">
+            <id property="id" column="id" />
+            <result property="drugReimbursementType" column="drugReimbursementType" />
+            <result property="drugReimbursementProportion" column="drugReimbursementProportion" />
+            <result property="drugReimbursementInfo" column="drugReimbursementInfo" />
+            <result property="drugStatus" column="drugStatus" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,drugReimbursementType,drugReimbursementProportion,drugReimbursementInfo,drugStatus
+    </sql>
+</mapper>

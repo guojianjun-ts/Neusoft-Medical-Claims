@@ -40,13 +40,6 @@ public class DrugInfoServiceImpl extends ServiceImpl<DrugInfoMapper, DrugInfo>
     }
 
     @Override
-    public List<Long> listAllDrugInfoIds() {
-        return this.list().stream()
-                .map(DrugInfo::getId)
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public boolean deleteDrugInfoByIds(List<Long> ids) {
         return this.removeByIds(ids);
     }

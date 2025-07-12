@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gjj.nmcbackend.mapper.HospitalReimbursementMapper">
+
+    <resultMap id="BaseResultMap" type="com.gjj.nmcbackend.model.entity.HospitalReimbursement">
+            <id property="id" column="id" />
+            <result property="minPayLevel" column="minPayLevel" />
+            <result property="maxPayLevel" column="maxPayLevel" />
+            <result property="peopleType" column="peopleType" />
+            <result property="payProportion" column="payProportion" />
+            <result property="hospitalLevel" column="hospitalLevel" />
+            <result property="status" column="status" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,minPayLevel,maxPayLevel,peopleType,payProportion,hospitalLevel,
+        status
+    </sql>
+</mapper>

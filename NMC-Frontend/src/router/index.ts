@@ -11,10 +11,10 @@ const Level1Hospital = () => import('@/pages/medical-info/ReimbursementRates/Lev
 
 // 医生站医嘱处理模块
 const Admission = () => import('@/pages/doctor-station/Admission.vue')
-const PatientSelectDiagnosis = () => import('@/pages/doctor-station/Diagnosis/PatientSelect.vue')
-const AdmissionDiagnosis = () => import('@/pages/doctor-station/Diagnosis/AdmissionDiagnosis.vue')
-const PrimaryDiagnosis = () => import('@/pages/doctor-station/Diagnosis/PrimaryDiagnosis.vue')
-const OtherDiagnosis = () => import('@/pages/doctor-station/Diagnosis/OtherDiagnosis.vue')
+const PatientSelectDiagnosis = () => import('@/pages/doctor-station/PatientDiagnosis/PatientSelect.vue')
+const AdmissionDiagnosis = () => import('@/pages/doctor-station/PatientDiagnosis/AdmissionDiagnosis.vue')
+const PrimaryDiagnosis = () => import('@/pages/doctor-station/PatientDiagnosis/PrimaryDiagnosis.vue')
+const OtherDiagnosis = () => import('@/pages/doctor-station/PatientDiagnosis/OtherDiagnosis.vue')
 const PatientSelectOrders = () => import('@/pages/doctor-station/MedicalOrders/PatientSelect.vue')
 const DrugOrders = () => import('@/pages/doctor-station/MedicalOrders/DrugOrders.vue')
 const TreatmentOrders = () => import('@/pages/doctor-station/MedicalOrders/TreatmentOrders.vue')

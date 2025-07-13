@@ -1,6 +1,6 @@
 <template>
-  <div>
-
+  <div id="admissionPage">
+    这是入院登记页面
   </div>
 </template>
 
@@ -11,5 +11,7 @@
 
 
 <style scoped>
+#admissionPage {
 
+}
 </style>

@@ -34,6 +34,9 @@
           key="/insurance-center/reimbursement/cost-details"
           @click="navigateTo('/insurance-center/reimbursement/cost-details')"
         >
+          <template #icon>
+            <DollarOutlined />
+          </template>
           费用详情
         </a-menu-item>
 
@@ -42,6 +45,9 @@
           key="/insurance-center/reimbursement/reimbursement-details"
           @click="navigateTo('/insurance-center/reimbursement/reimbursement-details')"
         >
+          <template #icon>
+            <DollarOutlined />
+          </template>
           报销详情
         </a-menu-item>
       </a-sub-menu>

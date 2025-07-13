@@ -18,7 +18,7 @@ public class HospitalReimbursementVO {
     public static HospitalReimbursementVO fromEntity(HospitalReimbursement entity) {
         HospitalReimbursementVO vo = new HospitalReimbursementVO();
         vo.setId(entity.getId());
-        vo.setPayRange(entity.getMinPayLevel() + "-" + entity.getMaxPayLevel());
+        vo.setPayRange(entity.getMinPayLevel() + " ~ " + entity.getMaxPayLevel());
         vo.setPeopleTypeDesc(entity.getPeopleType() == 0 ? "退休人员" : "在职人员");
         vo.setProportionDesc(entity.getPayProportion() + "%");
         vo.setStatusDesc(entity.getStatus() == 0 ? "禁用" : "正常");

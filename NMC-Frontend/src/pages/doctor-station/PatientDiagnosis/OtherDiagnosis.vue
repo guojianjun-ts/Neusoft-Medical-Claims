@@ -1,6 +1,6 @@
 <template>
-  <div>
-
+  <div id="otherDiagnosisPage">
+    这是其它诊断页面
   </div>
 </template>
 
@@ -11,5 +11,7 @@
 
 
 <style scoped>
+#otherDiagnosisPage {
 
+}
 </style>

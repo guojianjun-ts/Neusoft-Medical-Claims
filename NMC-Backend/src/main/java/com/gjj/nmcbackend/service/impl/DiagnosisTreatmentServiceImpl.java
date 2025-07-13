@@ -1,9 +1,11 @@
 package com.gjj.nmcbackend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gjj.nmcbackend.model.entity.DiagnosisTreatment;
+import com.gjj.nmcbackend.model.entity.MedicalService;
 import com.gjj.nmcbackend.service.DiagnosisTreatmentService;
 import com.gjj.nmcbackend.mapper.DiagnosisTreatmentMapper;
 import org.springframework.stereotype.Service;
@@ -28,8 +30,11 @@ public class DiagnosisTreatmentServiceImpl extends ServiceImpl<DiagnosisTreatmen
 
     @Override
     public Page<DiagnosisTreatment> listDiagnosisTreatmentByPage(long current , long size , String treatmentName) {
-        Page<DiagnosisTreatment> page = new Page<>(current , size);
-        return this.page(page);
+        LambdaQueryWrapper<DiagnosisTreatment> queryWrapper = new LambdaQueryWrapper<>();
+        if (StringUtils.isNotBlank(treatmentName)) {
+            queryWrapper.like(DiagnosisTreatment::getTreatmentName, treatmentName);
+        }
+        return this.page(new Page<>(current, size), queryWrapper);
     }
 
     @Override

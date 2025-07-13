@@ -16,10 +16,10 @@ public interface DiagnosisTreatmentService extends IService<DiagnosisTreatment> 
     /**
      * 根据诊疗项目名称获取诊疗项目信息
      *
-     * @param chineseName 诊疗项目名称
+     * @param treatmentName 诊疗项目名称
      * @return 诊疗项目信息列表
      */
-    public List<DiagnosisTreatment> getDiagnosisTreatmentByName(String chineseName);
+    List<DiagnosisTreatment> getDiagnosisTreatmentByName(String treatmentName);
 
     /**
      * 分页获取诊疗项目信息

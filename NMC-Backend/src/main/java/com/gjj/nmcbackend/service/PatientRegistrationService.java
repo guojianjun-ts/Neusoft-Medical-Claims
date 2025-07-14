@@ -1,6 +1,5 @@
 package com.gjj.nmcbackend.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gjj.nmcbackend.model.entity.PatientRegistration;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -13,6 +12,6 @@ import com.gjj.nmcbackend.model.vo.PatientVO;
 */
 public interface PatientRegistrationService extends IService<PatientRegistration> {
 
-    Page<PatientVO> listPatientInfoByPage(long current, long size, String patientName);
+    Page<PatientVO> getCurrentPatient(long current, long size, String patientName);
 
 }

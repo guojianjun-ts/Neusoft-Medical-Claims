@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gjj.nmcbackend.mapper.InpatientDiseaseMapper">
+
+    <resultMap id="BaseResultMap" type="com.gjj.nmcbackend.model.entity.InpatientDisease">
+            <id property="id" column="id" />
+            <result property="patientId" column="patientId" />
+            <result property="diseaseId" column="diseaseId" />
+            <result property="orderTime" column="orderTime" />
+            <result property="diseaseType" column="diseaseType" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,patientId,diseaseId,orderTime,diseaseType
+    </sql>
+</mapper>

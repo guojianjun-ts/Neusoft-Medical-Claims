@@ -22,7 +22,7 @@ public class PatientRegistrationServiceImpl extends ServiceImpl<PatientRegistrat
         implements PatientRegistrationService {
 
     @Override
-    public Page<PatientVO> listPatientInfoByPage(long current, long size, String patientName) {
+    public Page<PatientVO> getCurrentPatient(long current, long size, String patientName) {
         // 1. 构建分页对象
         Page<PatientRegistration> page = new Page<>(current, size);
 

@@ -63,7 +63,7 @@
 
         <!-- 第三行：家庭住址 -->
         <a-row>
-          <a-col :span="24">
+          <a-col :span="24" >
             <a-form-item label="家庭住址" name="homeAddress">
               <a-input v-model:value="formData.homeAddress" />
             </a-form-item>

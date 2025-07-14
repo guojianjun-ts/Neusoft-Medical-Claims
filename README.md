@@ -242,16 +242,123 @@ export default router
          - 就是可以根据药品名称查询的表格，且支持分页展示数据
          - 另外两个直接复用第一个页面代码
 
-
-
-
-
 ### 患者信息表相关接口：
 
-1. add 接口
-2. update 接口
-3. listPage 分页查询接口
-4. 根据 id 查接口
+1. add 接口：`addPatient`
+2. update 接口：`updatePatient`
+3. listPage 分页查询接口：`listPatientVOByPage`
+4. 根据 id 查接口：`listPatientByPage` ---> 之后需要重命名为：`getCurrentPatient`
+
+## 入院诊断流程：
+
+1. 点击查看某条患者信息后，页面下方需要展现患者的详细信息（`getCurrentPatient`）
+2. 点击导航栏的增加入院诊断后，进入入院诊断页面。
+3. 页面标题提供当前所选中病患的姓名
+4. 之后是一个可以根据疾病名称（`diseaseName`）的支持分页查询的表格
+5. 点击增加按钮后，根据页面的不同（入院诊断、主要诊断、其他诊断）传入一个 `diseaseType（tinyint）` 的值，且根据当前选中病患的信息，给出他的 `id（int）`，并且根据添加选中的疾病信息，给出一个 `diseaseId`，并且根据当前时间，给出一个 `orderTime（datetime）`，之后将这四个参数传入至后端接口中，后端存储该数据。
+6. 如果是已经添加的疾病，那么就会显示 `取消添加`，点击之后，会在数据库中对该记录进行删除
+
+
+
+## InpatientDrug开发流程
+
+1. 在选择患者页面，选择患者xxx后，点击页面顶部的增加药品处方医嘱，跳转至药品处方医嘱。
+
+2. 跳转至药品处方医嘱页面时，会拥有 患者id（`patientId`），在点击某一个药品进行添加后，会获取药品id（`drugId`），随后会弹出一个表单，需要填写 `AddInpatientDrugRequest`封装类的剩下的参数
+
+   ```java
+   package com.gjj.nmcbackend.model.dto.Inpatient;
+   
+   import lombok.Data;
+   
+   import java.util.Date;
+   
+   @Data
+   public class AddInpatientDrugRequest {
+   
+       /**
+        * 患者id
+        */
+       private Integer patientId;
+   
+       /**
+        * 药品id
+        */
+       private Integer drugId;
+   
+   
+       /**
+        * 医嘱内容
+        */
+       private String doctorOrder;
+   
+       /**
+        * 药品用法
+        */
+       private String useMethod;
+   
+   
+       /**
+        * 用药频率
+        */
+       private Integer orderNumber;
+   
+       /**
+        * 用药起始时间
+        */
+       private Date startTime;
+   
+       /**
+        * 用药结束时间
+        */
+       private Date endTime;
+   
+   }
+   
+   ```
+
+3. 随后，记录通过 `InpatientDrugService` MyBatis-Plus 的 `save` 存储到数据库中 `InpatientDrug` 中
+
+4. 药品处方医嘱页面需要分页（支持使用药品名称（`chinaName`）来分页查询），展示的数据为DrugInfo封装类：`InpatientDrugVO`
+
+   ```java
+   package com.gjj.nmcbackend.model.vo;
+   
+   public class InpatientDrugVO {
+   
+       /**
+        * 药品id
+        */
+       private Integer id;
+   
+       /**
+        * 药品中文名称
+        */
+       private String chinaName;
+   
+       /**
+        * 规格
+        */
+       private String specifications;
+   
+       /**
+        * 生产企业
+        */
+       private String drugManufacturer;
+   
+       /**
+        * 价格
+        */
+       private String drugPrice;
+   }
+   
+   ```
+
+   
+
+
+
+
 
 
 

@@ -146,6 +146,11 @@ declare namespace API {
     hospitalLevel: string
   }
 
+  type getCurrentPatientUsingGETParams = {
+    /** patientId */
+    patientId: number
+  }
+
   type getDiagnosisTreatmentByNameUsingGETParams = {
     /** chineseName */
     chineseName: string
@@ -204,11 +209,6 @@ declare namespace API {
     serviceName?: string
     /** size */
     size?: number
-  }
-
-  type listPatientByPageUsingGETParams = {
-    /** patientId */
-    patientId: number
   }
 
   type listPatientVOByPageUsingGETParams = {

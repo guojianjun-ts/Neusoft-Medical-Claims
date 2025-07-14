@@ -17,10 +17,10 @@ export async function addPatientUsingPost(
   })
 }
 
-/** listPatientByPage GET /api/patient/get */
-export async function listPatientByPageUsingGet(
+/** getCurrentPatient GET /api/patient/get */
+export async function getCurrentPatientUsingGet(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.listPatientByPageUsingGETParams,
+  params: API.getCurrentPatientUsingGETParams,
   options?: { [key: string]: any }
 ) {
   return request<API.BaseResponsePatientRegistration_>('/api/patient/get', {

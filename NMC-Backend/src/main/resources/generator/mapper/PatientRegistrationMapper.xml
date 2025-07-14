@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gjj.nmcbackend.mapper.PatientRegistrationMapper">
+
+    <resultMap id="BaseResultMap" type="com.gjj.nmcbackend.model.entity.PatientRegistration">
+            <id property="id" column="id" />
+            <result property="caseNumber" column="caseNumber" />
+            <result property="patientName" column="patientName" />
+            <result property="gender" column="gender" />
+            <result property="cardNumber" column="cardNumber" />
+            <result property="birthday" column="birthday" />
+            <result property="page" column="page" />
+            <result property="ageType" column="ageType" />
+            <result property="homeAddress" column="homeAddress" />
+            <result property="visitDate" column="visitDate" />
+            <result property="paymentType" column="paymentType" />
+            <result property="workStatus" column="workStatus" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,caseNumber,patientName,gender,cardNumber,birthday,
+        page,ageType,homeAddress,visitDate,paymentType,
+        workStatus
+    </sql>
+</mapper>

@@ -71,6 +71,18 @@ declare namespace API {
     message?: string
   }
 
+  type BaseResponsePagePatientVO_ = {
+    code?: number
+    data?: PagePatientVO_
+    message?: string
+  }
+
+  type BaseResponsePatientRegistration_ = {
+    code?: number
+    data?: PatientRegistration
+    message?: string
+  }
+
   type deleteDiagnosisTreatmentUsingDELETEParams = {
     /** id */
     id: number
@@ -194,6 +206,20 @@ declare namespace API {
     size?: number
   }
 
+  type listPatientByPageUsingGETParams = {
+    /** patientId */
+    patientId: number
+  }
+
+  type listPatientVOByPageUsingGETParams = {
+    /** current */
+    current?: number
+    /** patientName */
+    patientName?: string
+    /** size */
+    size?: number
+  }
+
   type LoginUserVO = {
     createTime?: string
     id?: number
@@ -240,6 +266,40 @@ declare namespace API {
     records?: MedicalService[]
     size?: number
     total?: number
+  }
+
+  type PagePatientVO_ = {
+    current?: number
+    pages?: number
+    records?: PatientVO[]
+    size?: number
+    total?: number
+  }
+
+  type PatientRegistration = {
+    ageType?: string
+    birthday?: string
+    cardNumber?: string
+    caseNumber?: string
+    gender?: string
+    homeAddress?: string
+    id?: number
+    page?: number
+    patientName?: string
+    paymentType?: string
+    visitDate?: string
+    workStatus?: string
+  }
+
+  type PatientVO = {
+    cardNumber?: string
+    caseNumber?: string
+    gender?: string
+    id?: number
+    patientName?: string
+    paymentType?: string
+    visitDate?: string
+    workStatus?: string
   }
 
   type UserLoginRequest = {

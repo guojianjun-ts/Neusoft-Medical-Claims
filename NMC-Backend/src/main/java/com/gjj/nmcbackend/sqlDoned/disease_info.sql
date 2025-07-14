@@ -5,8 +5,8 @@ CREATE TABLE IF NOT EXISTS `disease_info` (
   `diseaseICD` varchar(50) DEFAULT NULL COMMENT '国际ICD编码',
   `diseaseCategory` varchar(50) DEFAULT NULL COMMENT '疾病所属分类',
   PRIMARY KEY (`id`),
-  KEY `idx_diseaseName` (`diseaseName`),
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='疾病表';
+  KEY `idx_diseaseName` (`diseaseName`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='疾病信息表';
 
 INSERT INTO `disease_info` VALUES ('2', 'GDXHL', '古典型霍乱', 'A00.051', '霍乱');
 INSERT INTO `disease_info` VALUES ('3', 'ZXDXHL', '中型[典型]霍乱', 'A00.052', '霍乱');

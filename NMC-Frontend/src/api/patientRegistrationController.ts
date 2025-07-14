@@ -32,10 +32,10 @@ export async function getCurrentPatientUsingGet(
   })
 }
 
-/** listPatientVOByPage GET /api/patient/list/page/vo */
-export async function listPatientVoByPageUsingGet(
+/** listPatientByPage GET /api/patient/list/page/vo */
+export async function listPatientByPageUsingGet(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.listPatientVOByPageUsingGETParams,
+  params: API.listPatientByPageUsingGETParams,
   options?: { [key: string]: any }
 ) {
   return request<API.BaseResponsePagePatientVO_>('/api/patient/list/page/vo', {

@@ -2,6 +2,7 @@
   <div class="patient-select-container">
     <!-- 页面标题 -->
     <div class="page-title">
+      <FileAddOutlined />
       医嘱患者选择：{{ selectedPatient?.patientName || '未选择患者' }}
     </div>
 
@@ -179,8 +180,8 @@ import {
   SearchOutlined,
   MedicineBoxOutlined,
   ToolOutlined,
-  UserOutlined
-} from '@ant-design/icons-vue';
+  UserOutlined, FileAddOutlined
+} from '@ant-design/icons-vue'
 import {
   listPatientByPageUsingGet,
   getCurrentPatientUsingGet

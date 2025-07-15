@@ -1,13 +1,13 @@
 <template>
-  <div id="admissionPage">
+  <div class="admission-container">
     <!-- 页面标题 -->
-    <div class="title">
+    <div class="page-title">
       <FileAddOutlined />
-      <span class="text">入院登记</span>
+      入院登记
     </div>
 
     <!-- 操作按钮 -->
-    <div style="margin-bottom: 16px">
+    <div class="nav-buttons">
       <a-space>
         <a-button type="primary" @click="submitForm">登记</a-button>
         <a-button @click="resetForm">清空</a-button>
@@ -15,22 +15,22 @@
     </div>
 
     <!-- 基本信息标题 -->
-    <h2>基本信息</h2>
-    <div style="background-color: #f5f5f5; padding: 16px; border-radius: 4px; margin-bottom: 16px;">
-      <a-form ref="formRef" :model="formData" :rules="formRules" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
+    <a-divider orientation="left" class="section-title">基本信息</a-divider>
+    <div class="patient-detail">
+      <a-form ref="formRef" :model="formData" :rules="formRules" layout="vertical">
         <!-- 第一行：住院号、姓名、身份证号 -->
-        <a-row :gutter="16">
-          <a-col :span="8">
+        <a-row :gutter="24">
+          <a-col :span="6">
             <a-form-item label="住院号" name="caseNumber">
               <a-input v-model:value="formData.caseNumber" />
             </a-form-item>
           </a-col>
-          <a-col :span="8">
+          <a-col :span="6">
             <a-form-item label="姓名" name="patientName">
               <a-input v-model:value="formData.patientName" />
             </a-form-item>
           </a-col>
-          <a-col :span="8">
+          <a-col :span="6">
             <a-form-item label="身份证号" name="cardNumber">
               <a-input v-model:value="formData.cardNumber" />
             </a-form-item>
@@ -38,22 +38,21 @@
         </a-row>
 
         <!-- 第二行：年龄、出生日期、性别 -->
-        <a-row :gutter="16">
-          <a-col :span="8">
+        <a-row :gutter="24">
+          <a-col :span="6">
             <a-form-item label="年龄" name="page">
               <a-input v-model:value="formData.page" />
             </a-form-item>
           </a-col>
-          <a-col :span="8">
+          <a-col :span="6">
             <a-form-item label="出生日期" name="birthday">
-              <a-select v-model:value="formData.birthday">
-                <a-select-option value="2000-01-01">2000-01-01</a-select-option>
-              </a-select>
+              <!-- 出生日期输入框与姓名框长度一致 -->
+              <a-date-picker v-model:value="formData.birthday" format="YYYY-MM-DD" style="width: 100%" />
             </a-form-item>
           </a-col>
-          <a-col :span="8">
+          <a-col :span="6">
             <a-form-item label="性别" name="gender">
-              <a-select v-model:value="formData.gender">
+              <a-select v-model:value="formData.gender" style="width: 100%">
                 <a-select-option value="男">男</a-select-option>
                 <a-select-option value="女">女</a-select-option>
               </a-select>
@@ -61,9 +60,9 @@
           </a-col>
         </a-row>
 
-        <!-- 第三行：家庭住址 -->
+        <!-- 第三行：家庭住址（右端与身份证号对齐） -->
         <a-row>
-          <a-col :span="24" >
+          <a-col :span="18"> <!-- 调整列宽，使右端与身份证号对齐 -->
             <a-form-item label="家庭住址" name="homeAddress">
               <a-input v-model:value="formData.homeAddress" />
             </a-form-item>
@@ -73,28 +72,34 @@
     </div>
 
     <!-- 登记信息标题 -->
-    <h2>登记信息</h2>
-    <div style="background-color: #f5f5f5; padding: 16px; border-radius: 4px;">
-      <a-form :model="formData" :rules="formRules" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
+    <a-divider orientation="left" class="section-title">登记信息</a-divider>
+    <div class="patient-detail">
+      <a-form :model="formData" :rules="formRules" layout="vertical">
         <!-- 第四行：结算类别、工作状态、入院时间 -->
-        <a-row :gutter="16">
-          <a-col :span="8">
+        <a-row :gutter="24">
+          <a-col :span="6">
             <a-form-item label="结算类别" name="paymentType">
-              <a-select v-model:value="formData.paymentType">
+              <a-select v-model:value="formData.paymentType" style="width: 100%">
                 <a-select-option value="类别1">类别1</a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
-          <a-col :span="8">
+          <a-col :span="6">
             <a-form-item label="工作状态" name="workStatus">
-              <a-select v-model:value="formData.workStatus">
+              <a-select v-model:value="formData.workStatus" style="width: 100%">
                 <a-select-option value="在职">在职</a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
-          <a-col :span="8">
+          <a-col :span="6">
             <a-form-item label="入院时间" name="visitDate">
-              <a-input v-model:value="formData.visitDate" />
+              <!-- 入院时间输入框与姓名框长度一致 -->
+              <a-date-picker
+                v-model:value="formData.visitDate"
+                format="YYYY-MM-DD HH:mm:ss"
+                :disabled="true"
+                style="width: 100%"
+              />
             </a-form-item>
           </a-col>
         </a-row>
@@ -104,12 +109,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue';
+import { ref, reactive, onMounted } from 'vue';
 import { message } from 'ant-design-vue';
 import type { FormInstance, Rule } from 'ant-design-vue/es/form';
 import { useRouter } from 'vue-router';
 import { addPatientUsingPost } from '@/api/patientRegistrationController';
 import { FileAddOutlined } from '@ant-design/icons-vue';
+import moment from 'moment';
 
 const router = useRouter();
 
@@ -118,7 +124,7 @@ const formRef = ref<FormInstance>();
 // 表单数据
 const formData = reactive<API.PatientRegistration>({
   ageType: '',
-  birthday: '',
+  birthday: undefined,
   cardNumber: '',
   caseNumber: '',
   gender: '',
@@ -127,9 +133,21 @@ const formData = reactive<API.PatientRegistration>({
   page: 0,
   patientName: '',
   paymentType: '',
-  visitDate: '',
+  visitDate: moment(), // 使用moment对象初始化
   workStatus: '',
 });
+
+// 身份证号验证函数
+const validateCardNumber = (rule: Rule, value: string) => {
+  if (!value) {
+    return Promise.reject('请输入身份证号');
+  }
+  const cardReg = /(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+  if (!cardReg.test(value)) {
+    return Promise.reject('请输入有效的18位身份证号');
+  }
+  return Promise.resolve();
+};
 
 // 表单验证规则
 const formRules: Record<string, Rule[]> = {
@@ -140,9 +158,9 @@ const formRules: Record<string, Rule[]> = {
     { required: true, message: '请输入姓名' },
   ],
   cardNumber: [
-    { required: true, message: '请输入身份证号' },
+    { validator: validateCardNumber, trigger: 'blur' },
   ],
-  age: [
+  page: [
     { required: true, message: '请输入年龄' },
   ],
   birthday: [
@@ -158,17 +176,27 @@ const formRules: Record<string, Rule[]> = {
     { required: true, message: '请选择工作状态' },
   ],
   visitDate: [
-    { required: true, message: '请输入入院时间' },
+    { required: true, message: '入院时间将由系统自动生成' },
   ],
 };
+
+// 页面加载时自动填充当前时间
+onMounted(() => {
+  formData.visitDate = moment();
+});
 
 // 提交表单
 const submitForm = async () => {
   try {
     // 验证表单字段
     await formRef.value?.validate();
+
+    // 不需要提交visitDate，由后端自动生成
+    const formDataToSubmit = { ...formData };
+    delete formDataToSubmit.visitDate;
+
     // 调用 API 进行数据提交
-    const response = await addPatientUsingPost(formData);
+    const response = await addPatientUsingPost(formDataToSubmit);
     if (response.code === 200) {
       message.success('登记成功');
       // 登记成功后跳转到患者选择页面
@@ -185,7 +213,7 @@ const submitForm = async () => {
 const resetForm = () => {
   formRef.value?.resetFields();
   formData.ageType = '';
-  formData.birthday = '';
+  formData.birthday = undefined;
   formData.cardNumber = '';
   formData.caseNumber = '';
   formData.gender = '';
@@ -194,29 +222,59 @@ const resetForm = () => {
   formData.page = 0;
   formData.patientName = '';
   formData.paymentType = '';
-  formData.visitDate = '';
+  formData.visitDate = moment();
   formData.workStatus = '';
 };
 </script>
 
 <style scoped>
-#admissionPage {
-  padding: 16px;
+.admission-container {
+  padding: 24px;
+  background-color: #fff;
+  min-height: 100vh;
+  box-sizing: border-box;
 }
-.title{
-  display: flex;
-  align-items: center;
-  height: 80px;
-  margin-bottom: 16px;
-  border-bottom: 1px solid #444;
-  font-size: 28px;
+
+.page-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: #1890ff;
 }
-.title svg {
+
+.page-title svg {
   margin-right: 8px;
   font-size: 22px;
 }
-/* 新增样式：使标签左对齐 */
+
+.nav-buttons {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e8e8e8;
+  display: flex;
+  align-items: center;
+}
+
+.patient-detail {
+  margin-top: 24px;
+  padding: 16px;
+  background-color: #fafafa;
+  border-radius: 4px;
+}
+
+/* 患者详细信息表单：禁用状态文字黑色 */
+.patient-detail :deep(.ant-form-item-control-input-content .ant-input-disabled) {
+  color: #000 !important;
+  background-color: #fff !important;
+}
+
+/* 表单标签左对齐 */
 .ant-form-item-label {
   text-align: left !important;
+}
+
+/* 章节标题加粗 */
+.section-title {
+  font-weight: bold;
 }
 </style>

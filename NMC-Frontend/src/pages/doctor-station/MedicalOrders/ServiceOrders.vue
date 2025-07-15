@@ -2,6 +2,7 @@
   <div class="service-orders-container">
     <!-- 页面标题 -->
     <div class="page-title">
+      <FileAddOutlined />
       医嘱患者：{{ patientName || '未选择患者' }}
     </div>
 
@@ -117,7 +118,7 @@
 <script setup lang="ts">
 import { ref, onMounted, reactive, computed } from 'vue';
 import { useRoute } from 'vue-router';
-import { SearchOutlined } from '@ant-design/icons-vue';
+import { FileAddOutlined, SearchOutlined } from '@ant-design/icons-vue'
 import { message } from 'ant-design-vue';
 import {
   listMedicalInfoByPageUsingGet,

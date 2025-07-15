@@ -1,122 +1,170 @@
 <template>
-  <div id="patientSelectPage">
+  <div class="patient-select-container">
     <!-- 页面标题 -->
-    <div class="title">
+    <div class="page-title">
       <FileAddOutlined />
-      <span class="text">患者选择</span>
+      诊断患者患者选择：{{ selectedPatient?.patientName || '未选择患者' }}
     </div>
 
-    <!-- 操作按钮 -->
-    <div style="margin-bottom: 16px; border-bottom: 1px solid #444; height: 80px; display: flex; align-items: center;">
-      <a-space>
-        <a-button type="primary" @click="addAdmissionDiagnosis">增加入院诊断</a-button>
-        <a-button type="primary" @click="addPrimaryDiagnosis">增加主要诊断</a-button>
-        <a-button type="primary" @click="addOtherDiagnosis">增加其他诊断</a-button>
-      </a-space>
+    <!-- 导航按钮区域 + 取消选中按钮 -->
+    <div class="nav-buttons">
+      <a-button
+        type="primary"
+        @click="handleNavigate('admission-diagnosis')"
+        :disabled="!selectedPatient"
+      >
+        <template #icon>
+          <MedicineBoxOutlined />
+        </template>
+        增加入院诊断
+      </a-button>
+      <a-button
+        type="primary"
+        @click="handleNavigate('primary-diagnosis')"
+        :disabled="!selectedPatient"
+        style="margin-left: 16px"
+      >
+        <template #icon>
+          <ToolOutlined />
+        </template>
+        增加主要诊断
+      </a-button>
+      <a-button
+        type="primary"
+        @click="handleNavigate('other-diagnosis')"
+        :disabled="!selectedPatient"
+        style="margin-left: 16px"
+      >
+        <template #icon>
+          <UserOutlined />
+        </template>
+        增加其他诊断
+      </a-button>
     </div>
 
-    <!-- 患者姓名搜索栏 -->
-    <a-form layout="inline" :model="searchParams" @finish="doSearch">
-      <a-form-item label="患者姓名">
-        <a-input v-model:value="searchParams.patientName" placeholder="输入患者姓名" allow-clear />
-      </a-form-item>
-      <a-form-item>
-        <a-button type="primary" html-type="submit">搜索</a-button>
-      </a-form-item>
-    </a-form>
-    <div style="margin-bottom: 16px" />
+    <!-- 搜索和表格区域 -->
+    <div class="table-section">
+      <!-- 搜索框 + 取消选中按钮（并排显示） -->
+      <div class="search-container">
+        <div style="display: flex; align-items: center;">
+          <a-input
+            v-model:value="searchParams.patientName"
+            placeholder="请输入患者姓名搜索"
+            style="width: 300px"
+            allow-clear
+            @press-enter="handleSearch"
+          >
+            <template #suffix>
+              <SearchOutlined @click="handleSearch" />
+            </template>
+          </a-input>
 
-    <!-- 表格 -->
-    <a-table
-      :columns="columns"
-      :data-source="dataList"
-      :pagination="pagination"
-      :row-selection="{ selectedRowKeys, onChange: onSelectChange }"
-      :row-key="record => record.id"
-      @change="doTableChange"
-      bordered
-      class="no-wrap-header"
-    >
-      <template #bodyCell="{ column, record }">
-        <!-- 可根据需要添加自定义单元格内容 -->
-      </template>
-    </a-table>
+          <!-- 取消选中按钮：移到搜索框右侧，方块样式 -->
+          <a-button
+            type="default"
+            @click="handleCancelSelect"
+            :disabled="!selectedPatient"
+            style="margin-left: 12px; width: 100px; height: 40px;"
+          >
+            取消选中
+          </a-button>
+        </div>
+      </div>
 
-    <!-- 患者详细信息 -->
-    <h2>患者详细信息</h2>
-    <div style="background-color: #f5f5f5; padding: 16px; border-radius: 4px;">
-      <a-form ref="formRef" :model="selectedPatient" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
-        <!-- 第一行：住院号、姓名、身份证号 -->
-        <a-row :gutter="16">
-          <a-col :span="8">
-            <a-form-item label="住院号" name="caseNumber">
-              <a-input v-model:value="selectedPatient.caseNumber" disabled />
-            </a-form-item>
-          </a-col>
-          <a-col :span="8">
-            <a-form-item label="姓名" name="patientName">
-              <a-input v-model:value="selectedPatient.patientName" disabled />
-            </a-form-item>
-          </a-col>
-          <a-col :span="8">
-            <a-form-item label="身份证号" name="cardNumber">
-              <a-input v-model:value="selectedPatient.cardNumber" disabled />
-            </a-form-item>
-          </a-col>
-        </a-row>
+      <!-- 患者表格（移除多余的 renderCell 避免报错） -->
+      <a-table
+        :columns="columns"
+        :data-source="patientList"
+        row-key="id"
+        :pagination="false"
+        :row-selection="{
+          type: 'radio',
+          selectedRowKeys: selectedRowKeys,
+          onChange: handleRowSelect
+        }"
+        bordered
+        style="margin-top: 16px"
+      />
 
-        <!-- 第二行：年龄、出生日期、性别 -->
-        <a-row :gutter="16">
-          <a-col :span="8">
-            <a-form-item label="年龄" name="page">
-              <a-input v-model:value="selectedPatient.page" disabled />
-            </a-form-item>
-          </a-col>
-          <a-col :span="8">
-            <a-form-item label="出生日期" name="birthday">
-              <a-select v-model:value="selectedPatient.birthday" disabled>
-                <a-select-option value="2000-01-01">2000-01-01</a-select-option>
-              </a-select>
-            </a-form-item>
-          </a-col>
-          <a-col :span="8">
-            <a-form-item label="性别" name="gender">
-              <a-select v-model:value="selectedPatient.gender" disabled>
-                <a-select-option value="男">男</a-select-option>
-                <a-select-option value="女">女</a-select-option>
-              </a-select>
-            </a-form-item>
-          </a-col>
-        </a-row>
+      <!-- 分页控件（固定选项，避免切换后变化） -->
+      <div class="pagination-container">
+        <a-pagination
+          v-model:current="pagination.current"
+          v-model:page-size="pagination.size"
+          :total="pagination.total"
+          @change="handlePageChange"
+          @showSizeChange="handleSizeChange"
+          show-size-changer
+          :size-options="['3', '5', '10', '20']"
+          :locale="{ itemsPerPage: '/页' }"
+          :show-total="(total: number) => `共 ${total} 条记录`"
+          :page-size-options="['3', '5', '10', '20']"
+        />
+      </div>
+    </div>
 
-        <!-- 第三行：家庭住址 -->
-        <a-row>
-          <a-col :span="24">
-            <a-form-item label="家庭住址" name="homeAddress">
-              <a-input v-model:value="selectedPatient.homeAddress" disabled />
+    <!-- 患者详细信息表单 -->
+    <div v-if="selectedPatient" class="patient-detail">
+      <a-divider orientation="left">患者详细信息</a-divider>
+      <a-form
+        layout="vertical"
+        :model="selectedPatient"
+        :disabled="true"
+      >
+        <a-row :gutter="24">
+          <a-col :span="6">
+            <a-form-item label="患者ID">
+              <a-input v-model:value="selectedPatient.id" />
             </a-form-item>
           </a-col>
-        </a-row>
-
-        <!-- 第四行：结算类别、工作状态、入院时间 -->
-        <a-row :gutter="16">
-          <a-col :span="8">
-            <a-form-item label="结算类别" name="paymentType">
-              <a-select v-model:value="selectedPatient.paymentType" disabled>
-                <a-select-option value="类别1">类别1</a-select-option>
-              </a-select>
+          <a-col :span="6">
+            <a-form-item label="患者姓名">
+              <a-input v-model:value="selectedPatient.patientName" />
             </a-form-item>
           </a-col>
-          <a-col :span="8">
-            <a-form-item label="工作状态" name="workStatus">
-              <a-select v-model:value="selectedPatient.workStatus" disabled>
-                <a-select-option value="在职">在职</a-select-option>
-              </a-select>
+          <a-col :span="6">
+            <a-form-item label="性别">
+              <a-input v-model:value="selectedPatient.gender" />
             </a-form-item>
           </a-col>
-          <a-col :span="8">
-            <a-form-item label="入院时间" name="visitDate">
-              <a-input v-model:value="selectedPatient.visitDate" disabled />
+          <a-col :span="6">
+            <a-form-item label="出生日期">
+              <a-input v-model:value="selectedPatient.birthday" />
+            </a-form-item>
+          </a-col>
+          <a-col :span="6">
+            <a-form-item label="身份证号">
+              <a-input v-model:value="selectedPatient.cardNumber" />
+            </a-form-item>
+          </a-col>
+          <a-col :span="6">
+            <a-form-item label="病历号">
+              <a-input v-model:value="selectedPatient.caseNumber" />
+            </a-form-item>
+          </a-col>
+          <a-col :span="6">
+            <a-form-item label="就诊日期">
+              <a-input v-model:value="selectedPatient.visitDate" />
+            </a-form-item>
+          </a-col>
+          <a-col :span="6">
+            <a-form-item label="支付类型">
+              <a-input v-model:value="selectedPatient.paymentType" />
+            </a-form-item>
+          </a-col>
+          <a-col :span="6">
+            <a-form-item label="年龄类型">
+              <a-input v-model:value="selectedPatient.ageType" />
+            </a-form-item>
+          </a-col>
+          <a-col :span="6">
+            <a-form-item label="工作状态">
+              <a-input v-model:value="selectedPatient.workStatus" />
+            </a-form-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-item label="家庭地址">
+              <a-input v-model:value="selectedPatient.homeAddress" />
             </a-form-item>
           </a-col>
         </a-row>
@@ -126,169 +174,280 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted } from 'vue';
-import { message, type FormInstance } from 'ant-design-vue';
-import { FileAddOutlined } from '@ant-design/icons-vue';
-import { listPatientByPageUsingGet } from '@/api/patientRegistrationController';
-import type { PatientRegistration } from '@/api/typings.d.ts';
+import { ref, onMounted, reactive, watch } from 'vue';
+import { useRouter } from 'vue-router';
+import {
+  SearchOutlined,
+  MedicineBoxOutlined,
+  ToolOutlined,
+  UserOutlined, FileAddOutlined
+} from '@ant-design/icons-vue'
+import {
+  listPatientByPageUsingGet,
+  getCurrentPatientUsingGet
+} from '@/api/patientRegistrationController';
+
+import type {
+  PatientVO,
+  PatientRegistration,
+  listPatientByPageUsingGETParams
+} from '@/api/typings';
+import React from 'react'
+
+// 新增：格式化时间为本地时间字符串
+const formatToLocalTimeString = (date: Date | string) => {
+  if (!date) return '';
+
+  const d = new Date(date);
+  // 确保日期对象有效
+  if (isNaN(d.getTime())) return '';
+
+  const pad = (num: number) => num.toString().padStart(2, '0');
+
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+};
+
+// 路由实例
+const router = useRouter();
+
+// 患者列表数据
+const patientList = ref<PatientVO[]>([]);
+
+// 选中的患者
+const selectedPatient = ref<PatientRegistration | null>(null);
+
+// 选中的行ID（单选框绑定）
+const selectedRowKeys = ref<React.Key[]>([]);
 
 // 搜索参数
-const searchParams = reactive({
-  current: 1,
-  pageSize: 10,
-  patientName: undefined as string | undefined
+const searchParams = reactive<Partial<listPatientByPageUsingGETParams>>({
+  patientName: ''
 });
 
-// 数据列表
-const dataList = ref<PatientRegistration[]>([]);
-const total = ref(0);
-const selectedRowKeys = ref<number[]>([]);
-const selectedPatient = ref<PatientRegistration>({});
-const formRef = ref<FormInstance>();
+// 分页参数
+const pagination = reactive({
+  current: 1,
+  size: 3,  // 默认3条/页
+  total: 0
+});
 
-// 表格列配置
+// 表格列定义 - 修改就诊日期列的显示
 const columns = [
   {
-    title: '序号',
+    title: '患者ID',
     dataIndex: 'id',
-    width: 80,
-    align: 'center'
+    key: 'id',
+    width: 80
   },
   {
-    title: '住院号',
-    dataIndex: 'caseNumber',
-    width: 150
-  },
-  {
-    title: '姓名',
+    title: '患者姓名',
     dataIndex: 'patientName',
-    width: 150
-  },
-  {
-    title: '身份证号',
-    dataIndex: 'cardNumber',
-    width: 200
+    key: 'patientName',
+    width: 120
   },
   {
     title: '性别',
     dataIndex: 'gender',
+    key: 'gender',
     width: 80
+  },
+  {
+    title: '病历号',
+    dataIndex: 'caseNumber',
+    key: 'caseNumber',
+    width: 150
+  },
+  {
+    title: '就诊日期',
+    dataIndex: 'visitDate',
+    key: 'visitDate',
+    width: 150,
+    customRender: ({ text }: { text: string }) => formatToLocalTimeString(text)
+  },
+  {
+    title: '支付类型',
+    dataIndex: 'paymentType',
+    key: 'paymentType',
+    width: 120
   },
   {
     title: '工作状态',
     dataIndex: 'workStatus',
-    width: 150
-  },
-  {
-    title: '结算类别',
-    dataIndex: 'paymentType',
-    width: 150
-  },
-  {
-    title: '入院时间',
-    dataIndex: 'visitDate',
-    width: 150
+    key: 'workStatus',
+    width: 120
   }
 ];
 
-// 分页配置
-const pagination = computed(() => ({
-  current: searchParams.current,
-  pageSize: searchParams.pageSize,
-  total: total.value,
-  showSizeChanger: true,
-  showTotal: total => `共 ${total} 条`,
-  pageSizeOptions: ['3','10', '20', '50', '100']
-}));
-
-// 获取数据（统一处理分页和搜索）
-const fetchData = async () => {
+// 获取患者列表数据
+const fetchPatientList = async () => {
   try {
-    const params = {
-      current: searchParams.current,
-      size: searchParams.pageSize,
-      patientName: searchParams.patientName || undefined // 传undefined会被过滤
+    const params: listPatientByPageUsingGETParams = {
+      current: pagination.current,
+      size: pagination.size,
+      patientName: searchParams.patientName || undefined
     };
 
-    const res = await listPatientByPageUsingGet(params);
+    const response = await listPatientByPageUsingGet(params);
 
-    if (res.data.data) {
-      dataList.value = res.data.data.records || [];
-      total.value = res.data.data.total || 0;
+    if (response.data.data) {
+      patientList.value = response.data.data.records || [];
+      pagination.total = response.data.data.total || 0;
     } else {
-      message.error(res.data.message || '获取数据失败');
+      console.error('获取患者列表失败:', response.data.message);
     }
   } catch (error) {
-    message.error('获取数据失败');
+    console.error('获取患者列表时发生错误:', error);
   }
 };
 
-// 搜索
-const doSearch = () => {
-  searchParams.current = 1;
-  fetchData();
-};
+// 获取患者详细信息
+const fetchPatientDetail = async (patientId: number) => {
+  try {
+    const response = await getCurrentPatientUsingGet({ patientId });
 
-// 表格变化
-const doTableChange = (pag: any) => {
-  searchParams.current = pag.current;
-  searchParams.pageSize = pag.pageSize;
-  fetchData();
-};
-
-// 行选择变化
-const onSelectChange = (selectedKeys: number[]) => {
-  selectedRowKeys.value = selectedKeys;
-  if (selectedKeys.length > 0) {
-    const selectedRecord = dataList.value.find(record => record.id === selectedKeys[0]);
-    if (selectedRecord) {
-      selectedPatient.value = { ...selectedRecord };
+    if (response.data.data) {
+      // 格式化就诊日期
+      const patientData = response.data.data;
+      if (patientData.visitDate) {
+        patientData.visitDate = formatToLocalTimeString(patientData.visitDate);
+      }
+      selectedPatient.value = patientData;
+    } else {
+      console.error('获取患者详情失败:', response.data.message);
     }
-  } else {
-    selectedPatient.value = {};
+  } catch (error) {
+    console.error('获取患者详情时发生错误:', error);
   }
 };
 
-// 增加入院诊断
-const addAdmissionDiagnosis = () => {
-  // 实现增加入院诊断的逻辑
-  console.log('增加入院诊断');
-};
-
-// 增加主要诊断
-const addPrimaryDiagnosis = () => {
-  // 实现增加主要诊断的逻辑
-  console.log('增加主要诊断');
-};
-
-// 增加其他诊断
-const addOtherDiagnosis = () => {
-  // 实现增加其他诊断的逻辑
-  console.log('增加其他诊断');
-};
-
+// 页面加载时获取患者列表
 onMounted(() => {
-  fetchData();
+  fetchPatientList();
 });
+
+// 处理表格行选择（选中时左侧圆圈变蓝）
+const handleRowSelect = (selectedRowKeys: React.Key[], selectedRows: PatientVO[]) => {
+  selectedRowKeys.values = selectedRowKeys; // 更新选中的行ID
+
+  if (selectedRows.length > 0) {
+    const patientId = selectedRows[0].id as number;
+    fetchPatientDetail(patientId);
+  } else {
+    selectedPatient.value = null;
+  }
+};
+
+// 取消选中功能
+const handleCancelSelect = () => {
+  selectedRowKeys.value = []; // 清空选中行ID
+  selectedPatient.value = null; // 清空选中患者
+};
+
+// 处理搜索
+const handleSearch = () => {
+  pagination.current = 1;
+  fetchPatientList();
+};
+
+// 处理分页页码变化
+const handlePageChange = (page: number) => {
+  pagination.current = page;
+  fetchPatientList();
+};
+
+// 处理分页大小变化（固定显示3/5/10/20）
+const handleSizeChange = (current: number, size: number) => {
+  pagination.current = current;
+  pagination.size = size;
+  fetchPatientList();
+};
+
+// 导航到指定页面
+const handleNavigate = (path: string) => {
+  if (selectedPatient.value?.id) {
+    console.log('准备跳转，选中的患者ID:', selectedPatient.value.id);
+    router.push({
+      path: `/doctor-station/medical-orders/${path}`, // 与路由配置中的路径完全匹配
+      query: {
+        patientId: selectedPatient.value.id,
+        patientName: selectedPatient.value.patientName
+      }
+    }).catch(err => {
+      console.error('路由跳转失败:', err);
+    });
+  } else {
+    console.log('未选中患者，无法跳转');
+  }
+};
+
+// 搜索防抖
+const debouncedSearch = ref<NodeJS.Timeout | null>(null);
+watch(
+  () => searchParams.patientName,
+  (newVal) => {
+    if (debouncedSearch.value) clearTimeout(debouncedSearch.value);
+    debouncedSearch.value = setTimeout(handleSearch, 500);
+  }
+);
 </script>
 
 <style scoped>
-#patientSelectPage {
-  padding: 16px;
+.patient-select-container {
+  padding: 24px;
+  background-color: #fff;
+  min-height: 100vh;
+  box-sizing: border-box;
 }
-.title{
+
+.page-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: #1890ff;
+}
+
+.nav-buttons {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e8e8e8;
   display: flex;
   align-items: center;
-  height: 80px;
-  border-bottom: 1px solid #444;
-  font-size: 28px;
 }
-.title svg {
-  margin-right: 8px;
-  font-size: 22px;
+
+.table-section {
+  margin-bottom: 32px;
 }
-/* 新增样式：使标签左对齐 */
-.ant-form-item-label {
-  text-align: left !important;
+
+.search-container {
+  margin-bottom: 16px;
+}
+
+.pagination-container {
+  margin-top: 16px;
+  text-align: right;
+}
+
+.patient-detail {
+  margin-top: 24px;
+  padding: 16px;
+  background-color: #fafafa;
+  border-radius: 4px;
+}
+
+/* 患者详细信息表单：禁用状态文字黑色 */
+.patient-detail :deep(.ant-form-item-control-input-content .ant-input-disabled) {
+  color: #000 !important;
+  background-color: #fff !important;
+}
+
+/* 单选框选中样式增强（确保变蓝） */
+:deep(.ant-radio-wrapper-checked .ant-radio-checked .ant-radio-inner) {
+  background-color: #1890ff !important;
+  border-color: #1890ff !important;
+}
+
+/* 取消选中按钮 hover 效果 */
+.nav-buttons .ant-btn-text:hover {
+  text-decoration: underline;
 }
 </style>

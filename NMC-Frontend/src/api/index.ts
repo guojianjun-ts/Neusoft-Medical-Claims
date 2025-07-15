@@ -5,7 +5,10 @@
 import * as hospitalReimbursementController from './hospitalReimbursementController'
 import * as drugInfoController from './drugInfoController'
 import * as drugReimbursementController from './drugReimbursementController'
+import * as inpatientDiagnosisController from './inpatientDiagnosisController'
 import * as inpatientDiseaseController from './inpatientDiseaseController'
+import * as inpatientDrugController from './inpatientDrugController'
+import * as inpatientMedicalController from './inpatientMedicalController'
 import * as patientRegistrationController from './patientRegistrationController'
 import * as medicalServiceController from './medicalServiceController'
 import * as diagnosisTreatmentController from './diagnosisTreatmentController'
@@ -14,7 +17,10 @@ export default {
   hospitalReimbursementController,
   drugInfoController,
   drugReimbursementController,
+  inpatientDiagnosisController,
   inpatientDiseaseController,
+  inpatientDrugController,
+  inpatientMedicalController,
   patientRegistrationController,
   medicalServiceController,
   diagnosisTreatmentController,

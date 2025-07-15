@@ -1,8 +1,35 @@
 declare namespace API {
-  type AddDiseaseRequest = {
+  type AddInpatientDiagnosisRequest = {
+    diagnosisId?: number
+    doctorOrder?: string
+    orderTime?: string
+    patientId?: number
+    useMethod?: string
+  }
+
+  type AddInpatientDiseaseRequest = {
     diseaseId?: number
     diseaseType?: number
     patientId?: number
+  }
+
+  type AddInpatientDrugRequest = {
+    doctorOrder?: string
+    drugId?: number
+    endTime?: string
+    orderNumber?: number
+    patientId?: number
+    startTime?: string
+    useMethod?: string
+  }
+
+  type AddInpatientMedicalRequest = {
+    doctorOrder?: string
+    medicalId?: number
+    orderNumber?: number
+    orderTime?: string
+    patientId?: number
+    useMethod?: string
   }
 
   type BaseResponseBoolean_ = {
@@ -77,9 +104,27 @@ declare namespace API {
     message?: string
   }
 
+  type BaseResponsePageInpatientDiagnosisVO_ = {
+    code?: number
+    data?: PageInpatientDiagnosisVO_
+    message?: string
+  }
+
   type BaseResponsePageInpatientDisease_ = {
     code?: number
     data?: PageInpatientDisease_
+    message?: string
+  }
+
+  type BaseResponsePageInpatientDrugVO_ = {
+    code?: number
+    data?: PageInpatientDrugVO_
+    message?: string
+  }
+
+  type BaseResponsePageInpatientMedicalVO_ = {
+    code?: number
+    data?: PageInpatientMedicalVO_
     message?: string
   }
 
@@ -102,10 +147,31 @@ declare namespace API {
   }
 
   type checkDiagnosisExistsUsingGETParams = {
+    /** diagnosisId */
+    diagnosisId: number
+    /** patientId */
+    patientId: number
+  }
+
+  type checkDiseaseExistsUsingGETParams = {
     /** diseaseId */
     diseaseId: number
     /** diseaseType */
     diseaseType?: number
+    /** patientId */
+    patientId: number
+  }
+
+  type checkDrugExistsUsingGETParams = {
+    /** drugId */
+    drugId: number
+    /** patientId */
+    patientId: number
+  }
+
+  type checkMedicalExistsUsingGETParams = {
+    /** medicalId */
+    medicalId: number
     /** patientId */
     patientId: number
   }
@@ -116,6 +182,13 @@ declare namespace API {
   }
 
   type deleteDiagnosisUsingPOSTParams = {
+    /** diagnosisId */
+    diagnosisId: number
+    /** patientId */
+    patientId: number
+  }
+
+  type deleteDiseaseUsingPOSTParams = {
     /** id */
     id: number
   }
@@ -130,9 +203,23 @@ declare namespace API {
     id: number
   }
 
+  type deleteDrugUsingPOSTParams = {
+    /** drugId */
+    drugId: number
+    /** patientId */
+    patientId: number
+  }
+
   type deleteMedicalServiceUsingDELETEParams = {
     /** id */
     id: number
+  }
+
+  type deleteMedicalUsingPOSTParams = {
+    /** medicalId */
+    medicalId: number
+    /** patientId */
+    patientId: number
   }
 
   type deleteUsingDELETEParams = {
@@ -224,6 +311,17 @@ declare namespace API {
     statusDesc?: string
   }
 
+  type InpatientDiagnosisVO = {
+    countryNumber?: string
+    id?: number
+    treatmentExclude?: string
+    treatmentInfo?: string
+    treatmentName?: string
+    treatmentNumber?: string
+    treatmentPrice?: number
+    treatmentUnit?: string
+  }
+
   type InpatientDisease = {
     diseaseId?: number
     diseaseType?: number
@@ -232,15 +330,32 @@ declare namespace API {
     patientId?: number
   }
 
-  type listDiagnosisByPageUsingGETParams = {
+  type InpatientDrugVO = {
+    chinaName?: string
+    drugManufacturer?: string
+    drugPrice?: number
+    id?: number
+    specifications?: string
+  }
+
+  type InpatientMedicalVO = {
+    countryNumber?: string
+    id?: number
+    serviceExclude?: string
+    serviceInfo?: string
+    serviceName?: string
+    serviceNumber?: string
+    servicePrice?: number
+    serviceUnit?: string
+  }
+
+  type listDiagnosisInfoByPageUsingGETParams = {
     /** current */
     current?: number
-    /** diseaseType */
-    diseaseType?: number
-    /** patientId */
-    patientId: number
     /** size */
     size?: number
+    /** treatmentName */
+    treatmentName?: string
   }
 
   type listDiagnosisTreatmentByPageUsingGETParams = {
@@ -252,6 +367,17 @@ declare namespace API {
     treatmentName?: string
   }
 
+  type listDiseaseByPageUsingGETParams = {
+    /** current */
+    current?: number
+    /** diseaseType */
+    diseaseType?: number
+    /** patientId */
+    patientId: number
+    /** size */
+    size?: number
+  }
+
   type listDiseaseInfoByPageUsingGETParams = {
     /** current */
     current?: number
@@ -261,9 +387,27 @@ declare namespace API {
     size?: number
   }
 
+  type listDrugInfoByPageUsingGET1Params = {
+    /** chineseName */
+    chineseName?: string
+    /** current */
+    current?: number
+    /** size */
+    size?: number
+  }
+
   type listDrugInfoByPageUsingGETParams = {
     /** chinaName */
     chinaName?: string
+    /** current */
+    current?: number
+    /** size */
+    size?: number
+  }
+
+  type listMedicalInfoByPageUsingGETParams = {
+    /** chineseName */
+    chineseName?: string
     /** current */
     current?: number
     /** size */
@@ -336,10 +480,34 @@ declare namespace API {
     total?: number
   }
 
+  type PageInpatientDiagnosisVO_ = {
+    current?: number
+    pages?: number
+    records?: InpatientDiagnosisVO[]
+    size?: number
+    total?: number
+  }
+
   type PageInpatientDisease_ = {
     current?: number
     pages?: number
     records?: InpatientDisease[]
+    size?: number
+    total?: number
+  }
+
+  type PageInpatientDrugVO_ = {
+    current?: number
+    pages?: number
+    records?: InpatientDrugVO[]
+    size?: number
+    total?: number
+  }
+
+  type PageInpatientMedicalVO_ = {
+    current?: number
+    pages?: number
+    records?: InpatientMedicalVO[]
     size?: number
     total?: number
   }

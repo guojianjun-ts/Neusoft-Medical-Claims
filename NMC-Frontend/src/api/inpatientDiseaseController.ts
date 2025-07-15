@@ -2,9 +2,9 @@
 /* eslint-disable */
 import request from '@/request'
 
-/** addDiagnosis POST /api/inpatient/disease/add */
-export async function addDiagnosisUsingPost(
-  body: API.AddDiseaseRequest,
+/** addDisease POST /api/inpatient/disease/add */
+export async function addDiseaseUsingPost(
+  body: API.AddInpatientDiseaseRequest,
   options?: { [key: string]: any }
 ) {
   return request<API.BaseResponseBoolean_>('/api/inpatient/disease/add', {
@@ -17,10 +17,10 @@ export async function addDiagnosisUsingPost(
   })
 }
 
-/** checkDiagnosisExists GET /api/inpatient/disease/check */
-export async function checkDiagnosisExistsUsingGet(
+/** checkDiseaseExists GET /api/inpatient/disease/check */
+export async function checkDiseaseExistsUsingGet(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.checkDiagnosisExistsUsingGETParams,
+  params: API.checkDiseaseExistsUsingGETParams,
   options?: { [key: string]: any }
 ) {
   return request<API.BaseResponseBoolean_>('/api/inpatient/disease/check', {
@@ -32,10 +32,10 @@ export async function checkDiagnosisExistsUsingGet(
   })
 }
 
-/** deleteDiagnosis POST /api/inpatient/disease/delete/${param0} */
-export async function deleteDiagnosisUsingPost(
+/** deleteDisease POST /api/inpatient/disease/delete/${param0} */
+export async function deleteDiseaseUsingPost(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.deleteDiagnosisUsingPOSTParams,
+  params: API.deleteDiseaseUsingPOSTParams,
   options?: { [key: string]: any }
 ) {
   const { id: param0, ...queryParams } = params
@@ -46,10 +46,10 @@ export async function deleteDiagnosisUsingPost(
   })
 }
 
-/** listDiagnosisByPage GET /api/inpatient/disease/list/page */
-export async function listDiagnosisByPageUsingGet(
+/** listDiseaseByPage GET /api/inpatient/disease/list/page */
+export async function listDiseaseByPageUsingGet(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.listDiagnosisByPageUsingGETParams,
+  params: API.listDiseaseByPageUsingGETParams,
   options?: { [key: string]: any }
 ) {
   return request<API.BaseResponsePageInpatientDisease_>('/api/inpatient/disease/list/page', {

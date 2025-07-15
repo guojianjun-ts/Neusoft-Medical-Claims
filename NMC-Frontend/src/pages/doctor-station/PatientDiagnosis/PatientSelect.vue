@@ -198,7 +198,7 @@ const pagination = computed(() => ({
   total: total.value,
   showSizeChanger: true,
   showTotal: total => `共 ${total} 条`,
-  pageSizeOptions: ['10', '20', '50', '100']
+  pageSizeOptions: ['3','10', '20', '50', '100']
 }));
 
 // 获取数据（统一处理分页和搜索）

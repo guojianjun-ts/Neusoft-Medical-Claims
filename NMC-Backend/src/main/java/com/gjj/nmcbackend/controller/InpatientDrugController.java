@@ -54,12 +54,18 @@ public class InpatientDrugController {
 
 
     /**
-     * 删除诊断记录
+     * 删除患者药品
+     * @param patientId
+     * @param drugId
+     * @return
      */
-    @PostMapping("/delete/{id}")
-    public BaseResponse<Boolean> deleteDrug(@PathVariable Integer id) {
-        boolean result = inpatientDrugService.removeById(id);
-        ThrowUtils.throwIf(!result , new BusinessException(ErrorCode.SYSTEM_ERROR));
+    @PostMapping("/delete")
+    public BaseResponse<Boolean> deleteDrug(
+            @RequestParam Integer patientId,
+            @RequestParam Integer drugId) {
+
+        boolean result = inpatientDrugService.deleteByPatientAndDrug(patientId, drugId);
+        ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR, "删除失败，记录不存在");
         return ResultUtils.success(result);
     }
 }

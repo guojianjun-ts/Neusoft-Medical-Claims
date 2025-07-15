@@ -21,4 +21,6 @@ public interface InpatientDiagnosisService extends IService<InpatientDiagnosis> 
 
     Page<InpatientDiagnosisVO> listInpatientDiagnosisByPage(long current, long size, String diagnosisName);
 
+    boolean deleteByPatientAndDiagnosis(Integer patientId , Integer diagnosisId);
+
 }

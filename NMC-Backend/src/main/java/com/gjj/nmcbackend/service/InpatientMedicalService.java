@@ -20,4 +20,7 @@ public interface InpatientMedicalService extends IService<InpatientMedical> {
 
     Page<InpatientMedicalVO> listInpatientMedicalByPage(long current, long size, String medicalName);
 
+    boolean deleteByPatientAndMedical(Integer patientId , Integer medicalId);
+
+
 }

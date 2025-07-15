@@ -52,14 +52,19 @@ public class InpatientDiagnosisController {
         return ResultUtils.success(page);
     }
 
-
     /**
      * 删除诊断记录
      */
-    @PostMapping("/delete/{id}")
-    public BaseResponse<Boolean> deleteDiagnosis(@PathVariable Integer id) {
-        boolean result = inpatientDiagnosisService.removeById(id);
-        ThrowUtils.throwIf(!result , new BusinessException(ErrorCode.SYSTEM_ERROR));
+    @PostMapping("/delete")
+    public BaseResponse<Boolean> deleteDiagnosis(
+            @RequestParam Integer patientId,
+            @RequestParam Integer diagnosisId) {
+
+        ThrowUtils.throwIf(patientId == null || patientId <= 0, ErrorCode.PARAMS_ERROR, "患者ID不能为空且必须大于0");
+        ThrowUtils.throwIf(diagnosisId == null || diagnosisId <= 0, ErrorCode.PARAMS_ERROR, "诊断ID不能为空且必须大于0");
+
+        boolean result = inpatientDiagnosisService.deleteByPatientAndDiagnosis(patientId, diagnosisId);
+        ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR, "删除失败，记录不存在");
         return ResultUtils.success(result);
     }
 }

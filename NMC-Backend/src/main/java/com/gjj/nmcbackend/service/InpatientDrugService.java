@@ -20,5 +20,6 @@ public interface InpatientDrugService extends IService<InpatientDrug> {
     boolean checkDrugExists(Integer patientId, Integer drugId);
 
     Page<InpatientDrugVO> listInpatientDrugByPage(long current, long size, String drugName);
-    
+
+    boolean deleteByPatientAndDrug(Integer patientId , Integer drugId);
 }

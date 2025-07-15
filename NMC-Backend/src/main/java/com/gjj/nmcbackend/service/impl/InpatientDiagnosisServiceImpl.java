@@ -79,6 +79,15 @@ public class InpatientDiagnosisServiceImpl extends ServiceImpl<InpatientDiagnosi
         inpatientDiagnosisVOPage.setRecords(voRecords);
         return inpatientDiagnosisVOPage;
     }
+
+    @Override
+    public boolean deleteByPatientAndDiagnosis(Integer patientId, Integer diagnosisId) {
+        LambdaQueryWrapper<InpatientDiagnosis> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(InpatientDiagnosis::getPatientId, patientId)
+                .eq(InpatientDiagnosis::getDiagnosisId, diagnosisId);
+
+        return this.remove(queryWrapper);
+    }
 }
 
 

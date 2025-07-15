@@ -1,5 +1,6 @@
 package com.gjj.nmcbackend.model.dto.Inpatient;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.util.Date;
@@ -30,6 +31,7 @@ public class AddInpatientMedicalRequest {
     /**
      * 用药起始时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date orderTime;
 
     /**

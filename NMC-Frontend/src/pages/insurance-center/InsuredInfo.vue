@@ -72,7 +72,10 @@
         </a-form-item>
 
         <a-form-item label="工作状态">
-          <a-input v-model:value="selectedPatient.workStatus" />
+          <a-select v-model:value="selectedPatient.workStatus" placeholder="请选择工作状态">
+            <a-select-option value="在职">在职</a-select-option>
+            <a-select-option value="退休">退休</a-select-option>
+          </a-select>
         </a-form-item>
 
         <div class="form-actions">
@@ -95,6 +98,12 @@ import {
 
 // 表格列定义
 const columns = [
+  {
+    title: '患者ID',
+    dataIndex: 'id',
+    key: 'id',
+    width: 100
+  },
   {
     title: '住院号',
     dataIndex: 'caseNumber',

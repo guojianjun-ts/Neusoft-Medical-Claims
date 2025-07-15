@@ -86,6 +86,12 @@ declare namespace API {
     message?: string
   }
 
+  type BaseResponsePageDiagnosisCostVO_ = {
+    code?: number
+    data?: PageDiagnosisCostVO_
+    message?: string
+  }
+
   type BaseResponsePageDiagnosisTreatment_ = {
     code?: number
     data?: PageDiagnosisTreatment_
@@ -95,6 +101,12 @@ declare namespace API {
   type BaseResponsePageDiseaseInfo_ = {
     code?: number
     data?: PageDiseaseInfo_
+    message?: string
+  }
+
+  type BaseResponsePageDrugCostVO_ = {
+    code?: number
+    data?: PageDrugCostVO_
     message?: string
   }
 
@@ -131,6 +143,12 @@ declare namespace API {
   type BaseResponsePageMedicalService_ = {
     code?: number
     data?: PageMedicalService_
+    message?: string
+  }
+
+  type BaseResponsePageMedicalServiceCostVO_ = {
+    code?: number
+    data?: PageMedicalServiceCostVO_
     message?: string
   }
 
@@ -233,6 +251,15 @@ declare namespace API {
     id: number
   }
 
+  type DiagnosisCostVO = {
+    diagnosisCode?: string
+    diagnosisId?: number
+    diagnosisName?: string
+    excludeContent?: string
+    price?: number
+    unit?: string
+  }
+
   type DiagnosisTreatment = {
     countryNumber?: string
     id?: number
@@ -252,6 +279,15 @@ declare namespace API {
     diseaseICD?: string
     diseaseName?: string
     id?: number
+  }
+
+  type DrugCostVO = {
+    drugId?: number
+    drugName?: string
+    manufacturer?: string
+    price?: number
+    specification?: string
+    unit?: string
   }
 
   type DrugInfo = {
@@ -355,6 +391,15 @@ declare namespace API {
     serviceUnit?: string
   }
 
+  type listDiagnosisCostByPatientIdUsingGETParams = {
+    /** current */
+    current?: number
+    /** patientId */
+    patientId: number
+    /** size */
+    size?: number
+  }
+
   type listDiagnosisInfoByPageUsingGETParams = {
     /** current */
     current?: number
@@ -389,6 +434,15 @@ declare namespace API {
     current?: number
     /** diseaseName */
     diseaseName?: string
+    /** size */
+    size?: number
+  }
+
+  type listDrugCostByPatientIdUsingGETParams = {
+    /** current */
+    current?: number
+    /** patientId */
+    patientId: number
     /** size */
     size?: number
   }
@@ -447,6 +501,15 @@ declare namespace API {
     size?: number
   }
 
+  type listServiceCostByPatientIdUsingGETParams = {
+    /** current */
+    current?: number
+    /** patientId */
+    patientId: number
+    /** size */
+    size?: number
+  }
+
   type LoginUserVO = {
     createTime?: string
     id?: number
@@ -471,6 +534,23 @@ declare namespace API {
     serviceUnit?: string
   }
 
+  type MedicalServiceCostVO = {
+    excludeContent?: string
+    medicalId?: number
+    price?: number
+    serviceCode?: string
+    serviceName?: string
+    unit?: string
+  }
+
+  type PageDiagnosisCostVO_ = {
+    current?: number
+    pages?: number
+    records?: DiagnosisCostVO[]
+    size?: number
+    total?: number
+  }
+
   type PageDiagnosisTreatment_ = {
     current?: number
     pages?: number
@@ -483,6 +563,14 @@ declare namespace API {
     current?: number
     pages?: number
     records?: DiseaseInfo[]
+    size?: number
+    total?: number
+  }
+
+  type PageDrugCostVO_ = {
+    current?: number
+    pages?: number
+    records?: DrugCostVO[]
     size?: number
     total?: number
   }
@@ -531,6 +619,14 @@ declare namespace API {
     current?: number
     pages?: number
     records?: MedicalService[]
+    size?: number
+    total?: number
+  }
+
+  type PageMedicalServiceCostVO_ = {
+    current?: number
+    pages?: number
+    records?: MedicalServiceCostVO[]
     size?: number
     total?: number
   }

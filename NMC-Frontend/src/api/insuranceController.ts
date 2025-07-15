@@ -2,6 +2,66 @@
 /* eslint-disable */
 import request from '@/request'
 
+/** listDiagnosisCostByPatientId GET /api/insurance/cost/diagnosis/list */
+export async function listDiagnosisCostByPatientIdUsingGet(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.listDiagnosisCostByPatientIdUsingGETParams,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponsePageDiagnosisCostVO_>('/api/insurance/cost/diagnosis/list', {
+    method: 'GET',
+    params: {
+      // current has a default value: 1
+      current: '1',
+
+      // size has a default value: 5
+      size: '5',
+      ...params,
+    },
+    ...(options || {}),
+  })
+}
+
+/** listDrugCostByPatientId GET /api/insurance/cost/drug/list */
+export async function listDrugCostByPatientIdUsingGet(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.listDrugCostByPatientIdUsingGETParams,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponsePageDrugCostVO_>('/api/insurance/cost/drug/list', {
+    method: 'GET',
+    params: {
+      // current has a default value: 1
+      current: '1',
+
+      // size has a default value: 5
+      size: '5',
+      ...params,
+    },
+    ...(options || {}),
+  })
+}
+
+/** listServiceCostByPatientId GET /api/insurance/cost/medical/list */
+export async function listServiceCostByPatientIdUsingGet(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.listServiceCostByPatientIdUsingGETParams,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponsePageMedicalServiceCostVO_>('/api/insurance/cost/medical/list', {
+    method: 'GET',
+    params: {
+      // current has a default value: 1
+      current: '1',
+
+      // size has a default value: 5
+      size: '5',
+      ...params,
+    },
+    ...(options || {}),
+  })
+}
+
 /** updatePatientInfo PUT /api/insurance/patient/${param0} */
 export async function updatePatientInfoUsingPut(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
@@ -21,13 +81,13 @@ export async function updatePatientInfoUsingPut(
   })
 }
 
-/** listInsuredPatients GET /api/insurance/patient/list/page */
+/** listInsuredPatients GET /api/insurance/patient/list */
 export async function listInsuredPatientsUsingGet(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.listInsuredPatientsUsingGETParams,
   options?: { [key: string]: any }
 ) {
-  return request<API.BaseResponsePagePatientRegistration_>('/api/insurance/patient/list/page', {
+  return request<API.BaseResponsePagePatientRegistration_>('/api/insurance/patient/list', {
     method: 'GET',
     params: {
       // current has a default value: 1

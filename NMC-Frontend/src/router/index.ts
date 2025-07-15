@@ -69,7 +69,7 @@ const routes = [
 
           // 报销比例维护
           {
-            path: 'drug-rates',
+            path: 'drug-reimbursement',
             component: DrugRates,
             meta: { title: '药品报销比例设置' }
           },

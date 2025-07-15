@@ -138,7 +138,7 @@
           </a-form-item>
         </a-col>
         <a-col :span="6">
-          <a-form-item label="病历号">
+          <a-form-item label="住院号">
             <a-input v-model:value="selectedPatient.caseNumber" />
           </a-form-item>
         </a-col>
@@ -252,7 +252,7 @@ const columns = [
     width: 80
   },
   {
-    title: '病历号',
+    title: '住院号',
     dataIndex: 'caseNumber',
     key: 'caseNumber',
     width: 150

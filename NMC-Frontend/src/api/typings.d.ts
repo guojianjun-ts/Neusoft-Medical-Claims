@@ -134,6 +134,12 @@ declare namespace API {
     message?: string
   }
 
+  type BaseResponsePagePatientRegistration_ = {
+    code?: number
+    data?: PagePatientRegistration_
+    message?: string
+  }
+
   type BaseResponsePagePatientVO_ = {
     code?: number
     data?: PagePatientVO_
@@ -405,6 +411,15 @@ declare namespace API {
     size?: number
   }
 
+  type listInsuredPatientsUsingGETParams = {
+    /** current */
+    current?: number
+    /** name */
+    name?: string
+    /** size */
+    size?: number
+  }
+
   type listMedicalInfoByPageUsingGETParams = {
     /** chineseName */
     chineseName?: string
@@ -520,6 +535,14 @@ declare namespace API {
     total?: number
   }
 
+  type PagePatientRegistration_ = {
+    current?: number
+    pages?: number
+    records?: PatientRegistration[]
+    size?: number
+    total?: number
+  }
+
   type PagePatientVO_ = {
     current?: number
     pages?: number
@@ -552,6 +575,11 @@ declare namespace API {
     paymentType?: string
     visitDate?: string
     workStatus?: string
+  }
+
+  type updatePatientInfoUsingPUTParams = {
+    /** id */
+    id: number
   }
 
   type UserLoginRequest = {

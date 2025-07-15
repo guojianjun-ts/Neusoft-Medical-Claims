@@ -9,6 +9,7 @@ import * as inpatientDiagnosisController from './inpatientDiagnosisController'
 import * as inpatientDiseaseController from './inpatientDiseaseController'
 import * as inpatientDrugController from './inpatientDrugController'
 import * as inpatientMedicalController from './inpatientMedicalController'
+import * as insuranceController from './insuranceController'
 import * as patientRegistrationController from './patientRegistrationController'
 import * as medicalServiceController from './medicalServiceController'
 import * as diagnosisTreatmentController from './diagnosisTreatmentController'
@@ -21,6 +22,7 @@ export default {
   inpatientDiseaseController,
   inpatientDrugController,
   inpatientMedicalController,
+  insuranceController,
   patientRegistrationController,
   medicalServiceController,
   diagnosisTreatmentController,

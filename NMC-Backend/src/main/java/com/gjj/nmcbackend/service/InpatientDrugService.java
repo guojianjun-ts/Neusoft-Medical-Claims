@@ -5,6 +5,7 @@ import com.gjj.nmcbackend.model.dto.Inpatient.AddInpatientDrugRequest;
 import com.gjj.nmcbackend.model.entity.DrugInfo;
 import com.gjj.nmcbackend.model.entity.InpatientDrug;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.gjj.nmcbackend.model.vo.DrugCostVO;
 import com.gjj.nmcbackend.model.vo.InpatientDrugVO;
 
 /**
@@ -22,4 +23,9 @@ public interface InpatientDrugService extends IService<InpatientDrug> {
     Page<InpatientDrugVO> listInpatientDrugByPage(long current, long size, String drugName);
 
     boolean deleteByPatientAndDrug(Integer patientId , Integer drugId);
+
+    /**
+     * 根据患者ID分页查询药品费用
+     */
+    Page<DrugCostVO> listDrugCostByPatientId(Integer patientId, Integer current, Integer size);
 }

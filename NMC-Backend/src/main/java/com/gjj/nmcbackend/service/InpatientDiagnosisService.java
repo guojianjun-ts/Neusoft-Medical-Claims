@@ -5,6 +5,7 @@ import com.gjj.nmcbackend.model.dto.Inpatient.AddInpatientDiagnosisRequest;
 import com.gjj.nmcbackend.model.entity.DiagnosisTreatment;
 import com.gjj.nmcbackend.model.entity.InpatientDiagnosis;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.gjj.nmcbackend.model.vo.DiagnosisCostVO;
 import com.gjj.nmcbackend.model.vo.InpatientDiagnosisVO;
 
 /**
@@ -23,4 +24,8 @@ public interface InpatientDiagnosisService extends IService<InpatientDiagnosis> 
 
     boolean deleteByPatientAndDiagnosis(Integer patientId , Integer diagnosisId);
 
+    /**
+     * 根据患者ID分页查询诊疗项目费用
+     */
+    Page<DiagnosisCostVO> listDiagnosisCostByPatientId(Integer patientId, Integer current, Integer size);
 }

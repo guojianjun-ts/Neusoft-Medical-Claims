@@ -10,7 +10,9 @@ import com.gjj.nmcbackend.model.dto.Inpatient.AddInpatientMedicalRequest;
 import com.gjj.nmcbackend.model.entity.MedicalService;
 import com.gjj.nmcbackend.model.entity.InpatientMedical;
 import com.gjj.nmcbackend.model.entity.InpatientMedical;
+import com.gjj.nmcbackend.model.vo.DiagnosisCostVO;
 import com.gjj.nmcbackend.model.vo.InpatientMedicalVO;
+import com.gjj.nmcbackend.model.vo.MedicalServiceCostVO;
 import com.gjj.nmcbackend.service.MedicalServiceService;
 import com.gjj.nmcbackend.service.InpatientMedicalService;
 import com.gjj.nmcbackend.mapper.InpatientMedicalMapper;
@@ -87,6 +89,11 @@ public class InpatientMedicalServiceImpl extends ServiceImpl<InpatientMedicalMap
                 .eq(InpatientMedical::getMedicalId, medicalId);
 
         return this.remove(queryWrapper);
+    }
+
+    @Override
+    public Page<MedicalServiceCostVO> listMedicalServiceCostByPatientId(Integer patientId , Integer current , Integer size) {
+        return null;
     }
 }
 

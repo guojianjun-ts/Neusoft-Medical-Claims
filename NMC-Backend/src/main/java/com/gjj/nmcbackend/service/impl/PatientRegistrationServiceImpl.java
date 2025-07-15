@@ -42,6 +42,22 @@ public class PatientRegistrationServiceImpl extends ServiceImpl<PatientRegistrat
             return patientVO;
         });
     }
+
+    @Override
+    public Page<PatientRegistration> listInsuredPatients(String name, Integer current, Integer size) {
+        LambdaQueryWrapper<PatientRegistration> queryWrapper = new LambdaQueryWrapper<>();
+
+        // 只查询医保患者
+        queryWrapper.eq(PatientRegistration::getPaymentType, "医保");
+
+        // 按姓名模糊查询
+        if (StringUtils.isNotBlank(name)) {
+            queryWrapper.like(PatientRegistration::getPatientName, name);
+        }
+
+        // 分页查询
+        return this.page(new Page<>(current, size), queryWrapper);
+    }
 }
 
 

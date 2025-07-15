@@ -10,6 +10,7 @@ import com.gjj.nmcbackend.model.dto.Inpatient.AddInpatientDiagnosisRequest;
 import com.gjj.nmcbackend.model.entity.DiagnosisTreatment;
 import com.gjj.nmcbackend.model.entity.InpatientDiagnosis;
 import com.gjj.nmcbackend.model.entity.InpatientDiagnosis;
+import com.gjj.nmcbackend.model.vo.DiagnosisCostVO;
 import com.gjj.nmcbackend.model.vo.InpatientDiagnosisVO;
 import com.gjj.nmcbackend.service.DiagnosisTreatmentService;
 import com.gjj.nmcbackend.service.InpatientDiagnosisService;
@@ -57,7 +58,6 @@ public class InpatientDiagnosisServiceImpl extends ServiceImpl<InpatientDiagnosi
 
     @Override
     public Page<InpatientDiagnosisVO> listInpatientDiagnosisByPage(long current , long size , String diagnosisName) {
-
         //1.先查询 DiagnosisTreatment 原实体类的分页数据
         LambdaQueryWrapper<DiagnosisTreatment> queryWrapper = new LambdaQueryWrapper<>();
         if (StringUtils.isNotBlank(diagnosisName)) {
@@ -81,12 +81,17 @@ public class InpatientDiagnosisServiceImpl extends ServiceImpl<InpatientDiagnosi
     }
 
     @Override
-    public boolean deleteByPatientAndDiagnosis(Integer patientId, Integer diagnosisId) {
+    public boolean deleteByPatientAndDiagnosis(Integer patientId , Integer diagnosisId) {
         LambdaQueryWrapper<InpatientDiagnosis> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(InpatientDiagnosis::getPatientId, patientId)
                 .eq(InpatientDiagnosis::getDiagnosisId, diagnosisId);
 
         return this.remove(queryWrapper);
+    }
+
+    @Override
+    public Page<DiagnosisCostVO> listDiagnosisCostByPatientId(Integer patientId , Integer current , Integer size) {
+        return null;
     }
 }
 

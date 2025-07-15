@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gjj.nmcbackend.model.dto.Inpatient.AddInpatientMedicalRequest;
 import com.gjj.nmcbackend.model.entity.InpatientMedical;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.gjj.nmcbackend.model.vo.DiagnosisCostVO;
 import com.gjj.nmcbackend.model.vo.InpatientMedicalVO;
+import com.gjj.nmcbackend.model.vo.MedicalServiceCostVO;
 
 /**
  * @author 78568
@@ -21,6 +23,8 @@ public interface InpatientMedicalService extends IService<InpatientMedical> {
     Page<InpatientMedicalVO> listInpatientMedicalByPage(long current, long size, String medicalName);
 
     boolean deleteByPatientAndMedical(Integer patientId , Integer medicalId);
+
+    Page<MedicalServiceCostVO> listMedicalServiceCostByPatientId(Integer patientId, Integer current, Integer size);
 
 
 }

@@ -14,23 +14,23 @@
       </a-space>
     </div>
 
-    <!-- 基本信息标题 -->
-    <a-divider orientation="left" class="section-title">基本信息</a-divider>
+    <!-- 登记信息 -->
+    <a-divider orientation="left" class="section-title">患者信息登记</a-divider>
     <div class="patient-detail">
       <a-form ref="formRef" :model="formData" :rules="formRules" layout="vertical">
         <!-- 第一行：住院号、姓名、身份证号 -->
         <a-row :gutter="24">
-          <a-col :span="6">
+          <a-col :span="8"> <!-- 24/3=8，三个输入框均分一行 -->
             <a-form-item label="住院号" name="caseNumber">
               <a-input v-model:value="formData.caseNumber" />
             </a-form-item>
           </a-col>
-          <a-col :span="6">
+          <a-col :span="8">
             <a-form-item label="姓名" name="patientName">
               <a-input v-model:value="formData.patientName" />
             </a-form-item>
           </a-col>
-          <a-col :span="6">
+          <a-col :span="8">
             <a-form-item label="身份证号" name="cardNumber">
               <a-input v-model:value="formData.cardNumber" />
             </a-form-item>
@@ -39,18 +39,17 @@
 
         <!-- 第二行：年龄、出生日期、性别 -->
         <a-row :gutter="24">
-          <a-col :span="6">
+          <a-col :span="8">
             <a-form-item label="年龄" name="page">
               <a-input v-model:value="formData.page" />
             </a-form-item>
           </a-col>
-          <a-col :span="6">
+          <a-col :span="8">
             <a-form-item label="出生日期" name="birthday">
-              <!-- 出生日期输入框与姓名框长度一致 -->
               <a-date-picker v-model:value="formData.birthday" format="YYYY-MM-DD" style="width: 100%" />
             </a-form-item>
           </a-col>
-          <a-col :span="6">
+          <a-col :span="8">
             <a-form-item label="性别" name="gender">
               <a-select v-model:value="formData.gender" style="width: 100%">
                 <a-select-option value="男">男</a-select-option>
@@ -60,46 +59,41 @@
           </a-col>
         </a-row>
 
-        <!-- 第三行：家庭住址（右端与身份证号对齐） -->
-        <a-row>
-          <a-col :span="18"> <!-- 调整列宽，使右端与身份证号对齐 -->
-            <a-form-item label="家庭住址" name="homeAddress">
-              <a-input v-model:value="formData.homeAddress" />
-            </a-form-item>
-          </a-col>
-        </a-row>
-      </a-form>
-    </div>
-
-    <!-- 登记信息标题 -->
-    <a-divider orientation="left" class="section-title">登记信息</a-divider>
-    <div class="patient-detail">
-      <a-form :model="formData" :rules="formRules" layout="vertical">
-        <!-- 第四行：结算类别、工作状态、入院时间 -->
+        <!-- 第三行：结算类别、工作状态、入院时间（三个一行） -->
         <a-row :gutter="24">
-          <a-col :span="6">
+          <a-col :span="8">
             <a-form-item label="结算类别" name="paymentType">
               <a-select v-model:value="formData.paymentType" style="width: 100%">
-                <a-select-option value="类别1">类别1</a-select-option>
+                <a-select-option value="医保">医保</a-select-option>
+                <a-select-option value="自费">自费</a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
-          <a-col :span="6">
+          <a-col :span="8">
             <a-form-item label="工作状态" name="workStatus">
               <a-select v-model:value="formData.workStatus" style="width: 100%">
                 <a-select-option value="在职">在职</a-select-option>
+                <a-select-option value="在职">退休</a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
-          <a-col :span="6">
+          <a-col :span="8">
             <a-form-item label="入院时间" name="visitDate">
-              <!-- 入院时间输入框与姓名框长度一致 -->
               <a-date-picker
                 v-model:value="formData.visitDate"
                 format="YYYY-MM-DD HH:mm:ss"
                 :disabled="true"
                 style="width: 100%"
               />
+            </a-form-item>
+          </a-col>
+        </a-row>
+
+        <!-- 第四行：家庭住址（独占一行） -->
+        <a-row>
+          <a-col :span="24">
+            <a-form-item label="家庭住址" name="homeAddress">
+              <a-input v-model:value="formData.homeAddress" />
             </a-form-item>
           </a-col>
         </a-row>
@@ -158,7 +152,7 @@ const formRules: Record<string, Rule[]> = {
     { required: true, message: '请输入姓名' },
   ],
   cardNumber: [
-    { validator: validateCardNumber, trigger: 'blur' },
+    { required:true,validator: validateCardNumber, trigger: 'blur' },
   ],
   page: [
     { required: true, message: '请输入年龄' },
@@ -269,7 +263,7 @@ const resetForm = () => {
 }
 
 /* 表单标签左对齐 */
-.ant-form-item-label {
+:deep(.ant-form-item-label) {
   text-align: left !important;
 }
 

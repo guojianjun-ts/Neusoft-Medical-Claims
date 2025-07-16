@@ -62,6 +62,26 @@ export async function listServiceCostByPatientIdUsingGet(
   })
 }
 
+/** listDiseaseByPatientId GET /api/insurance/disease/list */
+export async function listDiseaseByPatientIdUsingGet(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.listDiseaseByPatientIdUsingGETParams,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponsePagePatientDiseaseVO_>('/api/insurance/disease/list', {
+    method: 'GET',
+    params: {
+      // current has a default value: 1
+      current: '1',
+
+      // size has a default value: 5
+      size: '5',
+      ...params,
+    },
+    ...(options || {}),
+  })
+}
+
 /** updatePatientInfo PUT /api/insurance/patient/${param0} */
 export async function updatePatientInfoUsingPut(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)

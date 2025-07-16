@@ -32,6 +32,12 @@ declare namespace API {
     useMethod?: string
   }
 
+  type BaseResponseBigdecimal_ = {
+    code?: number
+    data?: number
+    message?: string
+  }
+
   type BaseResponseBoolean_ = {
     code?: number
     data?: boolean
@@ -83,6 +89,12 @@ declare namespace API {
   type BaseResponseLong_ = {
     code?: number
     data?: number
+    message?: string
+  }
+
+  type BaseResponseMapStringBigdecimal_ = {
+    code?: number
+    data?: Record<string, any>
     message?: string
   }
 
@@ -149,6 +161,12 @@ declare namespace API {
   type BaseResponsePageMedicalServiceCostVO_ = {
     code?: number
     data?: PageMedicalServiceCostVO_
+    message?: string
+  }
+
+  type BaseResponsePagePatientDiseaseVO_ = {
+    code?: number
+    data?: PagePatientDiseaseVO_
     message?: string
   }
 
@@ -310,6 +328,11 @@ declare namespace API {
     id?: number
   }
 
+  type getAllCategoryCostUsingGETParams = {
+    /** patientId */
+    patientId: number
+  }
+
   type getByLevelUsingGETParams = {
     /** hospitalLevel */
     hospitalLevel: string
@@ -325,6 +348,11 @@ declare namespace API {
     chineseName: string
   }
 
+  type getDrugCategoryCostUsingGETParams = {
+    /** patientId */
+    patientId: number
+  }
+
   type getDrugInfoByNameUsingGETParams = {
     /** chineseName */
     chineseName: string
@@ -333,6 +361,11 @@ declare namespace API {
   type getMedicalServiceByNameUsingGETParams = {
     /** chineseName */
     chineseName: string
+  }
+
+  type getTotalCostUsingGETParams = {
+    /** patientId */
+    patientId: number
   }
 
   type HospitalReimbursement = {
@@ -423,6 +456,15 @@ declare namespace API {
     current?: number
     /** diseaseType */
     diseaseType?: number
+    /** patientId */
+    patientId: number
+    /** size */
+    size?: number
+  }
+
+  type listDiseaseByPatientIdUsingGETParams = {
+    /** current */
+    current?: number
     /** patientId */
     patientId: number
     /** size */
@@ -520,6 +562,8 @@ declare namespace API {
     userProfile?: string
     userStatus?: number
   }
+
+  type MapStringBigdecimal_ = true
 
   type MedicalService = {
     countryNumber?: string
@@ -631,6 +675,14 @@ declare namespace API {
     total?: number
   }
 
+  type PagePatientDiseaseVO_ = {
+    current?: number
+    pages?: number
+    records?: PatientDiseaseVO[]
+    size?: number
+    total?: number
+  }
+
   type PagePatientRegistration_ = {
     current?: number
     pages?: number
@@ -645,6 +697,12 @@ declare namespace API {
     records?: PatientVO[]
     size?: number
     total?: number
+  }
+
+  type PatientDiseaseVO = {
+    diseaseName?: string
+    diseaseType?: number
+    id?: number
   }
 
   type PatientRegistration = {

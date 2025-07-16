@@ -3,14 +3,13 @@ package com.gjj.nmcbackend.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gjj.nmcbackend.common.BaseResponse;
 import com.gjj.nmcbackend.common.ResultUtils;
+import com.gjj.nmcbackend.model.entity.DiseaseInfo;
 import com.gjj.nmcbackend.model.entity.PatientRegistration;
 import com.gjj.nmcbackend.model.vo.DiagnosisCostVO;
 import com.gjj.nmcbackend.model.vo.DrugCostVO;
 import com.gjj.nmcbackend.model.vo.MedicalServiceCostVO;
-import com.gjj.nmcbackend.service.InpatientDiagnosisService;
-import com.gjj.nmcbackend.service.InpatientDrugService;
-import com.gjj.nmcbackend.service.InpatientMedicalService;
-import com.gjj.nmcbackend.service.PatientRegistrationService;
+import com.gjj.nmcbackend.model.vo.PatientDiseaseVO;
+import com.gjj.nmcbackend.service.*;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -31,6 +30,8 @@ public class InsuranceController {
     @Resource
     private InpatientMedicalService inpatientMedicalService;
 
+    @Resource
+    private InpatientDiseaseService inpatientDiseaseService;
 
 
     /**
@@ -99,4 +100,19 @@ public class InsuranceController {
             @RequestParam(defaultValue = "5") Integer size) {
         return ResultUtils.success(inpatientMedicalService.listMedicalServiceCostByPatientId(patientId, current, size));
     }
+
+    /**
+     * 根据患者ID分页查询疾病诊断信息
+     */
+    @GetMapping("/disease/list")
+    public BaseResponse<Page<PatientDiseaseVO>> listDiseaseByPatientId(
+            @RequestParam Integer patientId,
+            @RequestParam(defaultValue = "1") Integer current,
+            @RequestParam(defaultValue = "5") Integer size) {
+
+        Page<PatientDiseaseVO> page = inpatientDiseaseService
+                .listPatientDisease(patientId, current, size);
+        return ResultUtils.success(page);
+    }
+
 }

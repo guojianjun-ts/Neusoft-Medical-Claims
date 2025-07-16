@@ -16,4 +16,5 @@ public interface PatientRegistrationService extends IService<PatientRegistration
 
     Page<PatientRegistration> listInsuredPatients(String name , Integer current , Integer size);
 
+
 }

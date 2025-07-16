@@ -390,13 +390,462 @@ src/Pages/
 1. 后端：通过选中的病患id（`patientId`）来返回 由 `inpatient_diagnosis（患者诊疗项目表）`，`inpatient_drug（患者药品处方表）`，
    `inpatient_medical（患者医疗服务表）`这三个表（关联表，关联`patient_registration（病患信息表）`和`diagnosis_treatment（诊疗项目信息表）`，
    `drug_info（药品信息表）`，`medical_service（医疗服务信息表）`这三个
-2. ）
+2. 前端：已经完成
+
+
+
+## 参保人员费用报销页面开发：
+
+### 1.费用报销的参保人员信息查询页面开发（需要你想个src/pages/insurance-center/Reimbursement目录下的一个Vue文件）：
+
+前端部分：
+
+- 第一行是个标题：费用报销的参保人员信息查询：
+- 第二行是表格的搜索栏，可以根据参保人员姓名进行查询（）
+- 搜索栏下面是个表格，有以下的字段：
+  - 序号
+  - 住院号
+  - 姓名
+  - 性别
+  - 身份证号
+  - 家庭住址
+  - 入院日期
+  - 工作状态
+  - 结算类别
+  - 操作（参保人员费用详情 和 参保人员费用报销的跳转按钮）
+
+后端部分：
+
+- 直接使用`InsuranceController.java`中下面的接口方法就好
+
+- ```java
+  
+      /**
+       * 根据患者id分页查询参保人员药品
+       */
+      @GetMapping("/cost/drug/list")
+      public BaseResponse<Page<DrugCostVO>> listDrugCostByPatientId(
+              @RequestParam Integer patientId,
+              @RequestParam(defaultValue = "1") Integer current,
+              @RequestParam(defaultValue = "5") Integer size) {
+          return ResultUtils.success(inpatientDrugService.listDrugCostByPatientId(patientId, current, size));
+      }
+  ```
+
+- 给你我的 [insuranceController.ts](NMC-Frontend\src\api\insuranceController.ts) 和 [typings.d.ts](NMC-Frontend\src\api\typings.d.ts) 代码
+
+- 另外，我一般获取数据使用的是 res.data.data这样
+
+
+
+### 2.参保人员费用详情（src/pages/insurance-center/Reimbursement/CostDetails.vue）：
+
+前端结构：
+
+- 第一行是个标题：参保人员费用报销详情
+
+- 第二行是由参保人员的多个字段组成的一行，例如：
+  - 姓名：
+  - 性别：
+  - 住院号：以上姓名`patientName`、性别`gender`、住院号`caseNumber`字段通过`src/api/patientRegistrationController.ts`中的`getCurrentPatientUsingGet`可以获得
+
+  - 总费用：调用获取参保人员总费用的方法得到：`src/api/insuranceCostController.ts`中的`getTotalCostUsingGet`方法
+
+- 第三行是由参保人员的多个诊断组成的：入院诊断、主要诊断和其它诊断：通过`src/api/insuranceController.ts`中的`listDiseaseByPatientIdUsingGet`，并对 `BaseResponsePagePatientDiseaseVO_.PagePatientDiseaseVO_.PatientDiseaseVO[].diseaseType（1/2/3）`进行类型判断 可以获得三者有什么
+
+- 页面接下来的部分中，左侧是药品费用图表（讲述着参保人员甲类、乙类、丙类药品各个的总金额和占比）：通过调用`src/api/insuranceCostController.ts`中的`getDrugCategoryCostUsingGet`可以获得以下的数据，然后我需要你用ECharts图表对它进行可视化饼状图展示
+
+  ```json
+  {
+    "code": 0,
+    "data": {
+      "甲类": 20.13,
+      "乙类": 45.72,
+      "丙类": 6703.99
+    },
+    "message": "ok"
+  }
+  ```
+
+  
+
+- 右侧是报销详情图表（讲述着参保人员的保险药品、诊疗项目、医疗服务各个的总金额和百分比）：通过调用`src/api/insuranceCostController.ts`中的`getAllCategoryCostUsingGet`可以获得以下的数据，然后我需要你用ECharts图表对它进行可视化饼状图展示。
+
+- 请你给我写一下这个前端页面呢
+
+后端：
+
+1. 构建一个新的接口层 [InsuranceCostController.java](NMC-Backend\src\main\java\com\gjj\nmcbackend\controller\InsuranceCostController.java) 
+2. 需要提供计算当前参保人员所花费的总费用接口（药品+诊疗项目+医疗服务）
+3. 需要提供根据 [InsuranceController.java](NMC-Backend\src\main\java\com\gjj\nmcbackend\controller\InsuranceController.java) 中`listDrugCostByPatientId`方法获取到的药品id，根据甲乙丙类型的药品进行一个分类，计算出各类的费用和占比，用于制作ECharts图表
+4. 需要再根据需要提供根据 [InsuranceController.java](NMC-Backend\src\main\java\com\gjj\nmcbackend\controller\InsuranceController.java) 中`listDrugCostByPatientId`方法获取到的药品id，`listDiagnosisCostByPatientId`获取到的诊疗项目id，`listServiceCostByPatientId`获取到的医疗服务id来进行一个分类，并计算出各类的费用和占比，用于制作ECharts图表
+
+
+
+1.  public BigDecimal calculateTotalCost(Integer patientId) { }开发
+
+2. 我的思路，根据 patientId，去搜索用户的药品花费，诊疗项目花费，医疗服务花费，都花了多少钱，然后加在一起计算得出总的钱。
+
+3. 另外：例如获取诊疗项目花了多少钱，我在InpatientDiagnosisService.java中定义了下面的listDiagnosisCostByPatientId方法
+
+4. ```java
+       @Resource
+       private DiagnosisTreatmentService diagnosisInfoService;
+   
+       @Resource
+       private DiagnosisTreatmentMapper diagnosisTreatmentMapper;
+   
+   	@Override
+       public Page<DiagnosisCostVO> listDiagnosisCostByPatientId(Integer patientId, Integer current, Integer size) {
+           // 1. 查询患者诊疗项目记录
+           QueryWrapper<InpatientDiagnosis> queryWrapper = new QueryWrapper<>();
+           queryWrapper.eq("patientId", patientId)
+                   .eq("status", 1); // 只查询正常执行的医嘱
+   
+           Page<InpatientDiagnosis> inpatientDiagnosisPage = this.page(new Page<>(current, size), queryWrapper);
+   
+           // 2. 获取诊疗项目ID列表
+           List<Integer> diagnosisIds = inpatientDiagnosisPage.getRecords().stream()
+                   .map(InpatientDiagnosis::getDiagnosisId)
+                   .collect(Collectors.toList());
+   
+           if (diagnosisIds.isEmpty()) {
+               return new Page<>(current, size, 0);
+           }
+   
+           // 3. 批量查询诊疗项目信息
+           QueryWrapper<DiagnosisTreatment> diagnosisQueryWrapper = new QueryWrapper<>();
+           diagnosisQueryWrapper.in("id", diagnosisIds);
+           List<DiagnosisTreatment> diagnosisTreatments = diagnosisTreatmentMapper.selectList(diagnosisQueryWrapper);
+   
+           // 4. 构建诊疗项目信息映射表
+           Map<Integer, DiagnosisTreatment> diagnosisTreatmentMap = diagnosisTreatments.stream()
+                   .collect(Collectors.toMap(DiagnosisTreatment::getId, Function.identity()));
+   
+           // 5. 构建返回结果
+           List<DiagnosisCostVO> diagnosisCostVOs = new ArrayList<>();
+           for (InpatientDiagnosis inpatientDiagnosis : inpatientDiagnosisPage.getRecords()) {
+               DiagnosisTreatment treatment = diagnosisTreatmentMap.get(inpatientDiagnosis.getDiagnosisId());
+               if (treatment != null) {
+                   DiagnosisCostVO diagnosisCostVO = new DiagnosisCostVO();
+                   // 设置诊疗项目ID
+                   diagnosisCostVO.setDiagnosisId(treatment.getId());
+                   // 复制诊疗项目信息
+                   diagnosisCostVO.setDiagnosisName(treatment.getTreatmentName());
+                   diagnosisCostVO.setDiagnosisCode(treatment.getTreatmentNumber());
+                   diagnosisCostVO.setExcludeContent(treatment.getTreatmentExclude());
+                   diagnosisCostVO.setUnit(treatment.getTreatmentUnit());
+                   diagnosisCostVO.setPrice(treatment.getTreatmentPrice());
+                   diagnosisCostVO.setExcludeContent(treatment.getTreatmentExclude());
+   
+                   diagnosisCostVOs.add(diagnosisCostVO);
+               }
+           }
+   
+           // 6. 构建分页结果
+           Page<DiagnosisCostVO> resultPage = new Page<>(
+                   inpatientDiagnosisPage.getCurrent(),
+                   inpatientDiagnosisPage.getSize(),
+                   inpatientDiagnosisPage.getTotal()
+           );
+           resultPage.setRecords(diagnosisCostVOs);
+   
+           return resultPage;
+       }
+   ```
+
+5. 它可以根据患者id得到它所有的诊疗项目条目，然后我希望你对他进行修改，使得不需要获取分页后的那么多信息，只需要获取所有诊疗项目的钱各个是多少，可以用一个list<bigDemical>方法存起来，然后通过调用这个方法，我们可以通过得到它所有的价钱数组，然后全部加一起，就是所有诊疗项目的钱了，因此，请你给我写一下呢。
+
+#### 关于字段 
+
+需要通过：insuranceController中的`listDiagnosisCostByPatientIdUsingGet`、`listDrugCostByPatientIdUsingGet`、`listServiceCostByPatientIdUsingGet`，分别根据当前患者的patientId来调用这三个方法，然后分别获取到需要的：
+
+
+
+页面可用代码（备选方案1）
+
+```vue
+<template>
+  <div class="cost-details-container">
+    <!-- 页面标题 -->
+    <div class="page-header">
+      <h2><DollarOutlined /> 参保人员费用报销详情</h2>
+    </div>
+
+    <!-- 患者基本信息 -->
+    <a-card class="patient-info-card">
+      <a-row :gutter="16">
+        <a-col :span="6">姓名：{{ patientInfo.patientName }}</a-col>
+        <a-col :span="6">性别：{{ patientInfo.gender }}</a-col>
+        <a-col :span="6">住院号：{{ patientInfo.caseNumber }}</a-col>
+        <a-col :span="6">总费用：¥{{ totalCost.toFixed(2) }}</a-col>
+      </a-row>
+    </a-card>
+
+    <!-- 诊断信息 -->
+    <a-card class="diagnosis-info-card" title="诊断信息">
+      <a-row :gutter="16">
+        <a-col :span="8">入院诊断：{{ diagnosis.admission }}</a-col>
+        <a-col :span="8">主要诊断：{{ diagnosis.primary }}</a-col>
+        <a-col :span="8">其他诊断：{{ diagnosis.other }}</a-col>
+      </a-row>
+    </a-card>
+
+    <!-- 图表区域 -->
+    <div class="chart-area">
+      <a-row :gutter="24">
+        <!-- 药品分类饼图 -->
+        <a-col :span="12">
+          <a-card title="药品费用分类">
+            <div id="drug-chart" style="height: 400px;"></div>
+          </a-card>
+        </a-col>
+
+        <!-- 费用分类饼图 -->
+        <a-col :span="12">
+          <a-card title="费用报销分类">
+            <div id="reimbursement-chart" style="height: 400px;"></div>
+          </a-card>
+        </a-col>
+      </a-row>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, onMounted, nextTick } from 'vue';
+import { useRoute } from 'vue-router';
+import * as echarts from 'echarts';
+import { DollarOutlined } from '@ant-design/icons-vue';
+import {
+  getTotalCostUsingGet,
+  getDrugCategoryCostUsingGet,
+  getAllCategoryCostUsingGet
+} from '@/api/insuranceCostController';
+import type {
+  BaseResponseBigdecimal_,
+  BaseResponseMapStringBigdecimal_,
+  PatientRegistration
+} from '@/api/typings.d.ts';
+
+const route = useRoute();
+
+// 患者信息（根据实际接口调整）
+const patientInfo = ref<PatientRegistration>({
+  patientName: '郭建军',
+  gender: '男',
+  caseNumber: '605',
+  // 其他字段...
+});
+
+// 诊断信息（模拟数据，实际应从接口获取）
+const diagnosis = ref({
+  admission: '高血压',
+  primary: '冠心病',
+  other: '糖尿病'
+});
+
+// 费用数据
+const totalCost = ref(0);
+const drugCategoryData = ref<Record<string, number>>({});
+const allCategoryData = ref<Record<string, number>>({});
+
+// 初始化图表
+let drugChart: echarts.ECharts | null = null;
+let reimbursementChart: echarts.ECharts | null = null;
+
+// 获取数据
+const fetchData = async () => {
+  try {
+    const patientId = Number(route.query.patientId);
+
+    // 1. 获取患者基本信息（需替换为实际接口）
+    // patientInfo.value = await getPatientInfo(patientId);
+
+    // 2. 获取总费用
+    const totalRes = await getTotalCostUsingGet({ patientId });
+    if (totalRes.data?.data !== undefined) {
+      totalCost.value = totalRes.data.data;
+    }
+
+    // 3. 获取药品分类数据
+    const drugRes = await getDrugCategoryCostUsingGet({ patientId });
+    if (drugRes.data?.data) {
+      drugCategoryData.value = drugRes.data.data;
+    }
+
+    // 4. 获取全部分类数据
+    const allRes = await getAllCategoryCostUsingGet({ patientId });
+    if (allRes.data?.data) {
+      allCategoryData.value = allRes.data.data;
+    }
+
+    // 5. 渲染图表
+    nextTick(() => {
+      initCharts();
+    });
+  } catch (error) {
+    console.error('获取数据失败:', error);
+  }
+};
+
+// 初始化图表
+const initCharts = () => {
+  // 销毁旧实例
+  if (drugChart) drugChart.dispose();
+  if (reimbursementChart) reimbursementChart.dispose();
+
+  // 药品分类饼图
+  drugChart = echarts.init(document.getElementById('drug-chart'));
+  drugChart.setOption({
+    tooltip: {
+      trigger: 'item',
+      formatter: '{b}: ¥{c} ({d}%)'
+    },
+    legend: {
+      orient: 'vertical',
+      left: 'left',
+      data: Object.keys(drugCategoryData.value)
+    },
+    series: [{
+      name: '药品分类',
+      type: 'pie',
+      radius: '50%',
+      data: Object.entries(drugCategoryData.value).map(([name, value]) => ({
+        name,
+        value
+      })),
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      },
+      label: {
+        formatter: '{b}: {d}%'
+      }
+    }]
+  });
+
+  // 费用分类饼图
+  reimbursementChart = echarts.init(document.getElementById('reimbursement-chart'));
+  reimbursementChart.setOption({
+    tooltip: {
+      trigger: 'item',
+      formatter: '{b}: ¥{c} ({d}%)'
+    },
+    legend: {
+      orient: 'vertical',
+      left: 'left',
+      data: Object.keys(allCategoryData.value)
+    },
+    series: [{
+      name: '费用分类',
+      type: 'pie',
+      radius: '50%',
+      data: Object.entries(allCategoryData.value).map(([name, value]) => ({
+        name,
+        value
+      })),
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      },
+      label: {
+        formatter: '{b}: {d}%'
+      }
+    }]
+  });
+
+  // 响应式调整
+  window.addEventListener('resize', function() {
+    drugChart?.resize();
+    reimbursementChart?.resize();
+  });
+};
+
+// 页面加载时获取数据
+onMounted(() => {
+  fetchData();
+});
+</script>
+
+<style scoped>
+.cost-details-container {
+  padding: 24px;
+  background-color: #fff;
+  min-height: 100vh;
+}
+
+.page-header {
+  margin-bottom: 24px;
+}
+
+.page-header h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1890ff;
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.page-header .anticon {
+  margin-right: 8px;
+}
+
+.patient-info-card,
+.diagnosis-info-card {
+  margin-bottom: 24px;
+}
+
+.chart-area {
+  margin-top: 24px;
+}
+
+.ant-card {
+  border-radius: 8px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+}
+
+.ant-card-head {
+  font-weight: 500;
+  border-bottom: none;
+}
+
+.ant-card-body {
+  padding: 16px;
+}
+</style>
+
+```
 
 
 
 
 
+### 3.参保人员费用报销详情（src/pages/insurance-center/Reimbursement/ReimbursementDetails.vue）：
 
+1. 前端：右上角：返回按钮
+   1. 第一行：一个标题：参保人员费用报销
+   2. 第二行：显示着参保人员的姓名、人员类别、结算类别、总费用
+   3. 接下来是四个卡片：
+      1. 第一个卡片：
+         - 第一行：药品类型（其实就是甲类药品）：报销比例 ，该类药品总费用
+         - 第二行及之后：一个小表格，有药品名称，单价，价格三列
+      2. 第二个卡片：同第一个卡片（乙类药品），根据药品类型不同而不同
+      3. 第三个卡片：同第一个卡片（丙类药品），根据药品类型不同而不同
+      4. 第四个卡片：
+         - 第一行：写着 其它标题：诊疗项目和医疗服务的总费用
+         - 第二行及之后：一个小表格有该参保人员的项目名称，单价，价格
+   4. 四个小卡片之后，是一个横线标题写着：医保报销费用 = 【( 甲类药品报销费用 + 乙类药品报销费用 + 丙类药品报销费用 + 其他费用) - 起付线 】* 报销比例
+   5. 接下来是展示医院报销数据的表格：
+      1. 有三列分别是：起付线（minPayLevel），等级线（maxPayLevel），报销比例（payProportion要自己前端加个%）
+   6. 最后一行左侧是 报销费用：患者的总报销费用，右侧是 确认的按钮（但不需要有任何的动作）
 
 
 

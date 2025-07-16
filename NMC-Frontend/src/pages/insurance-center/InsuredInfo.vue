@@ -8,6 +8,7 @@
           v-model:value="searchParams.name"
           placeholder="输入患者姓名搜索"
           enter-button
+          style="width: 400px"
           @search="handleSearch"
         />
       </div>

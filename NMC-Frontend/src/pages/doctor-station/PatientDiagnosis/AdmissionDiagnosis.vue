@@ -199,7 +199,8 @@ const checkAddedDisease = async () => {
   const checks = diseaseList.value.map(disease => {
     const params: checkDiseaseExistsUsingGETParams = {
       diseaseId: disease.id as number,
-      patientId: patientId.value
+      patientId: patientId.value,
+      diseaseType: 1 // 入院诊断
     };
     return checkDiseaseExistsUsingGet(params);
   });
@@ -226,7 +227,8 @@ const handleAddDisease = async (diseaseId: number) => {
   try {
     const requestData: AddInpatientDiseaseRequest = {
       diseaseId,
-      patientId: patientId.value
+      patientId: patientId.value,
+      diseaseType: 1 // 入院诊断
     };
 
     const response = await addDiseaseUsingPost(requestData);

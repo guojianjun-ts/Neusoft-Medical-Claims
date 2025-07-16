@@ -311,6 +311,10 @@ const fetchPatientDetail = async (patientId: number) => {
       if (patientData.visitDate) {
         patientData.visitDate = formatToLocalTimeString(patientData.visitDate);
       }
+      // 设置年龄类型默认值
+      if (!patientData.ageType) {
+        patientData.ageType = '岁';
+      }
       selectedPatient.value = patientData;
     } else {
       console.error('获取患者详情失败:', response.data.message);
@@ -367,11 +371,13 @@ const handleNavigate = (path: string) => {
   if (selectedPatient.value?.id) {
     console.log('准备跳转，选中的患者ID:', selectedPatient.value.id);
     router.push({
-      path: `/doctor-station/medical-orders/${path}`, // 与路由配置中的路径完全匹配
+      path: `/doctor-station/diagnosis/${path}`, // 修改为正确的路径
       query: {
-        patientId: selectedPatient.value.id,
-        patientName: selectedPatient.value.patientName
+        patientId: selectedPatient.value.id.toString(), // 确保转换为字符串
+        patientName: selectedPatient.value.patientName || '' // 防止undefined
       }
+    }).then(() => {
+      console.log('跳转成功');
     }).catch(err => {
       console.error('路由跳转失败:', err);
     });

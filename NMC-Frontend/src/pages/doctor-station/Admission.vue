@@ -73,7 +73,7 @@
             <a-form-item label="工作状态" name="workStatus">
               <a-select v-model:value="formData.workStatus" style="width: 100%">
                 <a-select-option value="在职">在职</a-select-option>
-                <a-select-option value="在职">退休</a-select-option>
+                <a-select-option value="退休">退休</a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
@@ -191,7 +191,7 @@ const submitForm = async () => {
 
     // 调用 API 进行数据提交
     const response = await addPatientUsingPost(formDataToSubmit);
-    if (response.code === 200) {
+    if (response.data.data) {
       message.success('登记成功');
       // 登记成功后跳转到患者选择页面
       router.push('/doctor-station/diagnosis/patient-select');

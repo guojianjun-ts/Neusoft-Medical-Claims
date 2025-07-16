@@ -6,6 +6,12 @@ import java.math.BigDecimal;
 @Data
 public class MedicalServiceCostVO {
 
+
+    /**
+     * 医疗服务ID
+     */
+    private Integer medicalId;
+
     /**
      * 医疗服务名称
      */

@@ -1,11 +1,13 @@
 package com.gjj.nmcbackend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gjj.nmcbackend.exception.BusinessException;
 import com.gjj.nmcbackend.exception.ErrorCode;
+import com.gjj.nmcbackend.mapper.MedicalServiceMapper;
 import com.gjj.nmcbackend.model.dto.Inpatient.AddInpatientMedicalRequest;
 import com.gjj.nmcbackend.model.entity.MedicalService;
 import com.gjj.nmcbackend.model.entity.InpatientMedical;
@@ -20,8 +22,11 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -35,6 +40,10 @@ public class InpatientMedicalServiceImpl extends ServiceImpl<InpatientMedicalMap
 
     @Resource
     private MedicalServiceService medicalInfoService;
+
+    @Resource
+    private MedicalServiceMapper medicalServiceMapper;
+
 
     @Override
     public boolean addMedical(AddInpatientMedicalRequest request) {
@@ -92,8 +101,61 @@ public class InpatientMedicalServiceImpl extends ServiceImpl<InpatientMedicalMap
     }
 
     @Override
-    public Page<MedicalServiceCostVO> listMedicalServiceCostByPatientId(Integer patientId , Integer current , Integer size) {
-        return null;
+    public Page<MedicalServiceCostVO> listMedicalServiceCostByPatientId(Integer patientId, Integer current, Integer size) {
+        // 1. 查询患者医疗服务记录
+        QueryWrapper<InpatientMedical> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("patientId", patientId)
+                .eq("status", 1); // 只查询正常执行的医嘱
+
+        Page<InpatientMedical> inpatientMedicalPage = this.page(new Page<>(current, size), queryWrapper);
+
+        // 2. 获取医疗服务ID列表
+        List<Integer> medicalIds = inpatientMedicalPage.getRecords().stream()
+                .map(InpatientMedical::getMedicalId)
+                .collect(Collectors.toList());
+
+        if (medicalIds.isEmpty()) {
+            return new Page<>(current, size, 0);
+        }
+
+        // 3. 批量查询医疗服务信息
+        QueryWrapper<MedicalService> medicalQueryWrapper = new QueryWrapper<>();
+        medicalQueryWrapper.in("id", medicalIds);
+        List<MedicalService> medicalServices = medicalServiceMapper.selectList(medicalQueryWrapper);
+
+        // 4. 构建医疗服务信息映射表
+        Map<Integer, MedicalService> medicalServiceMap = medicalServices.stream()
+                .collect(Collectors.toMap(MedicalService::getId, Function.identity()));
+
+        // 5. 构建返回结果
+        List<MedicalServiceCostVO> medicalServiceCostVOs = new ArrayList<>();
+        for (InpatientMedical inpatientMedical : inpatientMedicalPage.getRecords()) {
+            MedicalService service = medicalServiceMap.get(inpatientMedical.getMedicalId());
+            if (service != null) {
+                MedicalServiceCostVO medicalServiceCostVO = new MedicalServiceCostVO();
+                // 设置医疗服务ID
+                medicalServiceCostVO.setMedicalId(service.getId());
+                // 复制医疗服务信息
+                medicalServiceCostVO.setServiceName(service.getServiceName());
+                medicalServiceCostVO.setServiceCode(service.getServiceNumber());
+                medicalServiceCostVO.setExcludeContent(service.getServiceExclude());
+                medicalServiceCostVO.setUnit(service.getServiceUnit());
+                medicalServiceCostVO.setPrice(service.getServicePrice());
+                medicalServiceCostVO.setExcludeContent(service.getServiceExclude());
+
+                medicalServiceCostVOs.add(medicalServiceCostVO);
+            }
+        }
+
+        // 6. 构建分页结果
+        Page<MedicalServiceCostVO> resultPage = new Page<>(
+                inpatientMedicalPage.getCurrent(),
+                inpatientMedicalPage.getSize(),
+                inpatientMedicalPage.getTotal()
+        );
+        resultPage.setRecords(medicalServiceCostVOs);
+
+        return resultPage;
     }
 }
 

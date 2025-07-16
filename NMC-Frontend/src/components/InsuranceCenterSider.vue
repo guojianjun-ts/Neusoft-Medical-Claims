@@ -22,35 +22,13 @@
         参保人员费用查询
       </a-menu-item>
 
-      <!-- 费用报销（带子菜单） -->
-      <a-sub-menu key="reimbursement">
+      <!-- 参保人员费用报销（直接跳转，不再有子菜单） -->
+      <a-menu-item key="/insurance-center/reimbursement" @click="navigateTo('/insurance-center/reimbursement')">
         <template #icon>
           <DollarOutlined />
         </template>
-        <template #title>参保人员费用报销</template>
-
-        <!-- 费用详情 -->
-        <a-menu-item
-          key="/insurance-center/reimbursement/cost-details"
-          @click="navigateTo('/insurance-center/reimbursement/cost-details')"
-        >
-          <template #icon>
-            <DollarOutlined />
-          </template>
-          费用详情
-        </a-menu-item>
-
-        <!-- 报销详情 -->
-        <a-menu-item
-          key="/insurance-center/reimbursement/reimbursement-details"
-          @click="navigateTo('/insurance-center/reimbursement/reimbursement-details')"
-        >
-          <template #icon>
-            <DollarOutlined />
-          </template>
-          报销详情
-        </a-menu-item>
-      </a-sub-menu>
+        参保人员费用报销
+      </a-menu-item>
     </a-menu>
   </a-layout-sider>
 </template>
@@ -67,7 +45,7 @@ import {
 const router = useRouter();
 const route = useRoute();
 const selectedKeys = ref([]);
-const openKeys = ref(['reimbursement']); // 默认展开报销子菜单
+const openKeys = ref([]); // 不再需要默认展开
 
 const onOpenChange = (keys) => {
   openKeys.value = keys;
@@ -80,10 +58,6 @@ const navigateTo = (path) => {
 // 自动更新选中状态
 watch(() => route.path, (newPath) => {
   selectedKeys.value = [newPath];
-  // 当访问报销相关页面时保持子菜单展开
-  if (newPath.includes('/reimbursement/')) {
-    openKeys.value = ['reimbursement'];
-  }
 }, { immediate: true });
 </script>
 

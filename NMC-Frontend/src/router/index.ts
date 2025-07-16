@@ -180,20 +180,18 @@ const routes = [
           },
           {
             path: 'reimbursement',
-            redirect: 'reimbursement/cost-details',
-            meta: { title: '费用报销' },
-            children: [
-              {
-                path: 'cost-details',
-                component: CostDetails,
-                meta: { title: '费用详情' }
-              },
-              {
-                path: 'reimbursement-details',
-                component: ReimbursementDetails,
-                meta: { title: '报销详情' }
-              }
-            ]
+            component: () => import('@/pages/insurance-center/Reimbursement/PatientInfoQuery.vue'),
+            meta: { title: '参保人员费用报销' }
+          },
+          {
+            path: 'cost-details',
+            component: () => import('@/pages/insurance-center/Reimbursement/CostDetails.vue'),
+            meta: { title: '费用详情' }
+          },
+          {
+            path: 'reimbursement-details',
+            component: () => import('@/pages/insurance-center/Reimbursement/ReimbursementDetails.vue'),
+            meta: { title: '报销详情' }
           }
         ]
       }

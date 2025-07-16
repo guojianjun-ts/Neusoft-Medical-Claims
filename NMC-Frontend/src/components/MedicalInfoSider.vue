@@ -68,6 +68,7 @@ const selectedKeys = ref([]);
 const openKeys = ref(['data-info', 'reimbursement']); // 默认展开所有子菜单
 
 const onOpenChange = (keys) => {
+  // 不再自动折叠其他菜单，保持当前状态
   openKeys.value = keys;
 };
 
@@ -92,6 +93,7 @@ router.afterEach((to) => {
   border-right: none;
 }
 
+/* 添加与 DoctorStationSider 一致的交互效果 */
 .ant-menu-item:hover,
 .ant-menu-submenu-title:hover {
   background-color: #f0f7ff !important;

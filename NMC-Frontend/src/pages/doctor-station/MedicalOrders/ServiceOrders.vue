@@ -213,7 +213,8 @@ const columns = [
     key: 'serviceInfo',
     width: 180,
     align: 'center',
-    ellipsis: true
+    ellipsis: true,
+    responsive: ['ld']
   },
   {
     title: '计价单位',

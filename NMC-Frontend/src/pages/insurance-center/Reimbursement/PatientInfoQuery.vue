@@ -43,11 +43,11 @@
               费用详情
             </a-button>
             <a-button
-              type="primary"
+              type="link"
               @click="handleReimbursement(record.id)"
               :disabled="!record.id"
             >
-              立即报销
+              报销详情
             </a-button>
           </a-space>
         </template>
@@ -84,13 +84,13 @@ const pagination = reactive({
   showTotal: (total: number) => `共 ${total} 条记录`
 });
 
-// 表格列定义
+// 表格列定义 - 优化宽度以适应常见屏幕
 const columns = [
   {
     title: '序号',
     dataIndex: 'index',
     key: 'index',
-    width: 80,
+    width: 60,
     align: 'center',
     slots: { customRender: 'index' }
   },
@@ -98,62 +98,62 @@ const columns = [
     title: '住院号',
     dataIndex: 'caseNumber',
     key: 'caseNumber',
-    width: 120,
+    width: 100,
     align: 'center'
   },
   {
     title: '姓名',
     dataIndex: 'patientName',
     key: 'patientName',
-    width: 100,
+    width: 80,
     align: 'center'
   },
   {
     title: '性别',
     dataIndex: 'gender',
     key: 'gender',
-    width: 80,
+    width: 60,
     align: 'center'
   },
   {
     title: '身份证号',
     dataIndex: 'cardNumber',
     key: 'cardNumber',
-    width: 180,
+    width: 140,
     align: 'center'
   },
   {
     title: '家庭住址',
     dataIndex: 'homeAddress',
     key: 'homeAddress',
-    width: 200,
+    width: 160,
     ellipsis: true
   },
   {
     title: '入院日期',
     dataIndex: 'visitDate',
     key: 'visitDate',
-    width: 120,
+    width: 100,
     align: 'center'
   },
   {
     title: '工作状态',
     dataIndex: 'workStatus',
     key: 'workStatus',
-    width: 120,
+    width: 100,
     align: 'center'
   },
   {
     title: '结算类别',
     dataIndex: 'paymentType',
     key: 'paymentType',
-    width: 120,
+    width: 100,
     align: 'center'
   },
   {
     title: '操作',
     key: 'action',
-    width: 250,
+    width: 200,
     align: 'center',
     fixed: 'right',
     slots: { customRender: 'action' }
@@ -252,5 +252,23 @@ onMounted(() => {
 
 .table-container {
   margin-top: 16px;
+  overflow-x: hidden; /* 禁止横向滚动 */
+}
+
+.ant-table {
+  table-layout: fixed;
+}
+
+/* 响应式调整 - 在小屏幕上进一步缩小列宽 */
+@media (max-width: 1200px) {
+  .ant-table-thead > tr > th,
+  .ant-table-tbody > tr > td {
+    padding: 8px !important;
+    font-size: 12px;
+  }
+
+  .columns {
+    width: 100% !important;
+  }
 }
 </style>

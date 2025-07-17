@@ -2,7 +2,7 @@
   <div class="patient-reimbursement-container">
     <!-- 页面标题 -->
     <div class="page-header">
-      <h2><DollarOutlined /> 参保人员费用报销</h2>
+      <h2><DollarOutlined /> 费用报销的参保人员信息查询</h2>
     </div>
 
     <!-- 搜索区域 -->

@@ -155,7 +155,7 @@ const searchParams = reactive<Partial<listMedicalInfoByPageUsingGETParams>>({
 // 分页参数
 const pagination = reactive({
   current: 1,
-  size: 10,  // 默认10条/页
+  size: 5,  // 默认5条/页
   total: 0
 });
 

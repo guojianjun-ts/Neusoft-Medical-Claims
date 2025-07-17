@@ -2,7 +2,7 @@
   <div class="reimbursement-details">
     <!-- 返回按钮和标题 -->
     <div class="header">
-      <a-button type="text" @click="goBack">
+      <a-button type="primary" @click="goBack">
         <template #icon><arrow-left-outlined /></template>
         返回
       </a-button>

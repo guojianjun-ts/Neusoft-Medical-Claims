@@ -1,7 +1,7 @@
 <template>
   <div class="cost-details-container">
     <!-- 页面标题 -->
-    <a-button type="text" @click="goBack">
+    <a-button type="primary" @click="goBack">
       <template #icon><arrow-left-outlined /></template>
       返回
     </a-button>

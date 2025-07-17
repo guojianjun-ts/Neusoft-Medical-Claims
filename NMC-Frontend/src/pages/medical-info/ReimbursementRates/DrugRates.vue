@@ -4,7 +4,7 @@
     <div style="margin-bottom: 16px">
       <a-space>
         <a-button type="primary" @click="showAddModal">
-          <plus-outlined /> 增加药品
+          <plus-outlined /> 增加药品报销比例
         </a-button>
         <a-button danger :disabled="!selectedRowKeys.length" @click="handleBatchDelete">
           <delete-outlined /> 批量删除
@@ -52,8 +52,8 @@
         <a-form-item label="序号" name="id">
           <a-input v-model:value="currentService.id" placeholder="请输入序号" disabled />
         </a-form-item>
-        <a-form-item label="等级" name="serviceType">
-          <a-select v-model:value="currentService.serviceType" placeholder="请选择项目类别" allowClear showSearch>
+        <a-form-item label="药品报销级别" name="drugReimbursementType">
+          <a-select v-model:value="currentService.drugReimbursementType" placeholder="请选择药品报销级别" allowClear showSearch>
             <a-select-option value="甲类">甲类</a-select-option>
             <a-select-option value="乙类">乙类</a-select-option>
             <a-select-option value="丙类">丙类</a-select-option>
@@ -70,8 +70,8 @@
         </a-form-item>
         <a-form-item label="状态" name="drugStatus">
           <a-radio-group v-model:value="currentService.drugStatus">
-            <a-radio value="1">状态1</a-radio>
-            <a-radio value="2">状态2</a-radio>
+            <a-radio :value="1">状态1</a-radio>
+            <a-radio :value="2">状态2</a-radio>
           </a-radio-group>
         </a-form-item>
         <a-form-item label="说明" name="drugReimbursementInfo">
@@ -102,8 +102,8 @@ const columns = [
     align: 'center'
   },
   {
-    title: '等级',
-    dataIndex: 'serviceType',
+    title: '药品报销级别',
+    dataIndex: 'drugReimbursementType',
     width: 150,
   },
   {
@@ -141,22 +141,22 @@ const dataList = ref<API.DrugReimbursement[]>([])
 const total = ref(0)
 const selectedRowKeys = ref<number[]>([])
 const modalVisible = ref(false)
-const modalTitle = ref('增加服务')
+const modalTitle = ref('增加药品报销比例')
 const confirmLoading = ref(false)
 const formRef = ref<FormInstance>()
 
-// 当前操作的医疗服务数据
+// 当前操作的药品数据
 const currentService = reactive({
   id: undefined,
-  serviceType: '甲类',
+  drugReimbursementType: '甲类',
   drugReimbursementProportion: undefined,
-  drugStatus: '1',
+  drugStatus: 1,
   drugReimbursementInfo: ''
 })
 
 // 表单验证规则
 const formRules = reactive({
-  serviceType: [{ required: true, message: '请选择项目类别' }],
+  drugReimbursementType: [{ required: true, message: '请选择药品报销级别' }],
   drugReimbursementProportion: [
     { required: true, message: '请输入报销比例' },
     { type: 'number', min: 0, message: '报销比例必须大于0' }
@@ -179,14 +179,17 @@ const fetchData = async () => {
   try {
     const res = await listAllReimbursementUsingGet()
 
-    if (res.data.data) {
-      dataList.value = res.data.data || []
-      total.value = res.data.data.length || 0
+    // 修改点1：适配不同的响应结构
+    const responseData = res.data?.data || res.data
+    if (responseData) {
+      dataList.value = Array.isArray(responseData) ? responseData : []
+      total.value = dataList.value.length
     } else {
-      message.error(res.data.message || '获取数据失败')
+      message.error(res.data?.message || '获取数据失败')
     }
   } catch (error) {
     message.error('获取数据失败')
+    console.error('获取数据失败:', error)
   }
 }
 
@@ -204,30 +207,35 @@ const onSelectChange = (selectedKeys: number[]) => {
 
 // 显示新增模态框
 const showAddModal = () => {
-  modalTitle.value = '增加药品类型'
+  modalTitle.value = '增加药品报销比例'
   Object.assign(currentService, {
     id: undefined,
-    serviceType: '甲类',
+    drugReimbursementType: '甲类',
     drugReimbursementProportion: undefined,
-    drugStatus: '1',
+    drugStatus: 1,
     drugReimbursementInfo: ''
   })
   modalVisible.value = true
 }
 
-// 编辑服务
+// 编辑药品
 const handleEdit = (record: any) => {
-  modalTitle.value = '修改药品类型'
+  modalTitle.value = '修改药品'
   Object.assign(currentService, JSON.parse(JSON.stringify(record)))
   modalVisible.value = true
 }
 
-// 删除服务
+// 删除药品
 const doDelete = async (id: number) => {
   try {
-    await deleteDrugReimbursementUsingPost({ id })
-    message.success('删除成功')
-    fetchData()
+    const res = await deleteDrugReimbursementUsingPost({ id })
+    // 修改点4：更灵活的删除响应判断
+    if (res.data.data) {
+      message.success('删除成功')
+      fetchData()
+    } else {
+      message.error(res.data?.message || '删除失败')
+    }
   } catch (error) {
     console.error('删除失败:', error)
     message.error('删除失败')
@@ -262,31 +270,33 @@ const handleModalOk = async () => {
 
     const submitData = {
       ...currentService,
-      drugReimbursementProportion: Number(currentService.drugReimbursementProportion)
+      drugReimbursementProportion: Number(currentService.drugReimbursementProportion),
+      drugStatus: Number(currentService.drugStatus)
     }
 
     if (currentService.id) {
       // 更新操作
-      const success = await updateDrugReimbursementUsingPost(submitData)
-      if (success) {
+      const res = await updateDrugReimbursementUsingPost(submitData)
+      // 修改点2：更灵活的响应判断
+      if (res.data.data) {
         message.success('更新成功')
+        modalVisible.value = false
+        fetchData()
       } else {
-        message.error('更新失败')
-        return
+        message.error(res.data?.message || '更新失败')
       }
     } else {
       // 新增操作
-      const success = await addDrugReimbursementUsingPost(submitData)
-      if (success) {
+      const res = await addDrugReimbursementUsingPost(submitData)
+      // 修改点3：更灵活的响应判断
+      if (res.data.data) {
         message.success('新增成功')
+        modalVisible.value = false
+        fetchData()
       } else {
-        message.error('新增失败')
-        return
+        message.error(res.data?.message || '新增失败')
       }
     }
-
-    modalVisible.value = false
-    fetchData()
   } catch (error) {
     console.error('保存失败:', error)
     if (!(error as any).errorFields) {

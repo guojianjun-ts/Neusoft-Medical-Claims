@@ -1,10 +1,13 @@
 <template>
   <div class="cost-details-container">
     <!-- 页面标题 -->
+    <a-button type="text" @click="goBack">
+      <template #icon><arrow-left-outlined /></template>
+      返回
+    </a-button>
     <div class="page-header">
-      <h2><DollarOutlined /> 参保人员费用报销详情</h2>
+      <h2><DollarOutlined />参保人员费用报销详情</h2>
     </div>
-
     <!-- 参保人员信息 -->
     <div class="patient-info-container">
       <a-card :bordered="false">
@@ -111,7 +114,9 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { DollarOutlined, PieChartOutlined } from '@ant-design/icons-vue';
+import { useRouter } from 'vue-router'
+
+import { ArrowLeftOutlined, DollarOutlined, PieChartOutlined } from '@ant-design/icons-vue'
 import * as echarts from 'echarts';
 import {
   getCurrentPatientUsingGet
@@ -128,6 +133,11 @@ import {
 // 路由和患者ID
 const route = useRoute();
 const patientId = ref<number | null>(Number(route.query.patientId) || null);
+const router = useRouter();
+// 返回上一页
+const goBack = () => {
+  router.go(-1)
+}
 
 // 状态管理
 const patientInfo = ref({

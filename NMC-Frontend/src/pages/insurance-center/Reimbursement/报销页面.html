@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>参保人员费用报销</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#1E40AF',
+            secondary: '#DBEAFE',
+            accent: '#BFDBFE',
+            lightGray: '#E5E7EB',
+            darkBlue: '#0F172A',
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .data-highlight {
+        @apply bg-secondary text-primary px-2 py-1 rounded-md;
+      }
+      .card-header {
+        @apply flex justify-between items-center mb-3 pb-2 border-b border-lightGray;
+      }
+      .small-table {
+        @apply w-full text-sm;
+      }
+      .small-table th, .small-table td {
+        @apply px-2 py-1 border border-lightGray;
+      }
+      .formula-header {
+        @apply bg-secondary text-primary px-4 py-2 rounded-md text-center font-medium my-4;
+      }
+      .hospital-table {
+        @apply w-full text-sm;
+      }
+      .hospital-table th, .hospital-table td {
+        @apply px-4 py-2 border border-lightGray;
+      }
+      .reimbursement-amount {
+        @apply bg-secondary text-primary px-4 py-2 rounded-md font-medium;
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-50 p-4 md:p-6 max-w-7xl mx-auto">
+  <!-- 返回按钮 -->
+  <div class="absolute top-4 right-4">
+    <button class="text-gray-600 hover:text-primary transition-colors">
+      <i class="fa fa-arrow-left mr-1"></i> 返回
+    </button>
+  </div>
+
+  <!-- 标题 -->
+  <h1 class="text-2xl font-bold text-gray-800 mb-4">参保人员费用报销</h1>
+
+  <!-- 参保人员信息 -->
+  <div class="flex flex-wrap gap-4 mb-4 pb-4 border-b border-lightGray">
+    <div class="flex items-center">
+      <span class="text-gray-600 mr-2">姓名：</span>
+      <span class="data-highlight">张三</span>
+    </div>
+    <div class="flex items-center">
+      <span class="text-gray-600 mr-2">人员类别：</span>
+      <span class="data-highlight">在职职工</span>
+    </div>
+    <div class="flex items-center">
+      <span class="text-gray-600 mr-2">结算类别：</span>
+      <span class="data-highlight">普通门诊</span>
+    </div>
+    <div class="flex items-center">
+      <span class="text-gray-600 mr-2">总费用：</span>
+      <span class="data-highlight">2,560.00元</span>
+    </div>
+  </div>
+
+  <!-- 四个卡片 -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    <!-- 甲类药品卡片 -->
+    <div class="bg-white rounded-lg shadow p-4 border border-lightGray">
+      <div class="card-header">
+        <h3 class="font-medium">甲类药品</h3>
+        <div class="flex gap-2">
+          <span class="data-highlight">报销比例：80%</span>
+          <span class="data-highlight">费用：850.00元</span>
+        </div>
+      </div>
+      <table class="small-table">
+        <thead>
+          <tr class="bg-gray-50">
+            <th>药品名称</th>
+            <th>单价</th>
+            <th>价格</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>阿司匹林</td>
+            <td>25.00元</td>
+            <td>50.00元</td>
+          </tr>
+          <tr>
+            <td>布洛芬</td>
+            <td>30.00元</td>
+            <td>60.00元</td>
+          </tr>
+          <tr>
+            <td>生理盐水</td>
+            <td>10.00元</td>
+            <td>20.00元</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 乙类药品卡片 -->
+    <div class="bg-white rounded-lg shadow p-4 border border-lightGray">
+      <div class="card-header">
+        <h3 class="font-medium">乙类药品</h3>
+        <div class="flex gap-2">
+          <span class="data-highlight">报销比例：60%</span>
+          <span class="data-highlight">费用：1,200.00元</span>
+        </div>
+      </div>
+      <table class="small-table">
+        <thead>
+          <tr class="bg-gray-50">
+            <th>药品名称</th>
+            <th>单价</th>
+            <th>价格</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>头孢克洛</td>
+            <td>45.00元</td>
+            <td>90.00元</td>
+          </tr>
+          <tr>
+            <td>奥美拉唑</td>
+            <td>60.00元</td>
+            <td>120.00元</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 丙类药品卡片 -->
+    <div class="bg-white rounded-lg shadow p-4 border border-lightGray">
+      <div class="card-header">
+        <h3 class="font-medium">丙类药品</h3>
+        <div class="flex gap-2">
+          <span class="data-highlight">报销比例：0%</span>
+          <span class="data-highlight">费用：320.00元</span>
+        </div>
+      </div>
+      <table class="small-table">
+        <thead>
+          <tr class="bg-gray-50">
+            <th>药品名称</th>
+            <th>单价</th>
+            <th>价格</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>保健品A</td>
+            <td>160.00元</td>
+            <td>320.00元</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 诊疗项目和医疗服务卡片 -->
+    <div class="bg-white rounded-lg shadow p-4 border border-lightGray">
+      <div class="card-header">
+        <h3 class="font-medium">其它项目</h3>
+        <span class="data-highlight">费用：190.00元</span>
+      </div>
+      <table class="small-table">
+        <thead>
+          <tr class="bg-gray-50">
+            <th>项目名称</th>
+            <th>单价</th>
+            <th>价格</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>心电图</td>
+            <td>80.00元</td>
+            <td>80.00元</td>
+          </tr>
+          <tr>
+            <td>血常规</td>
+            <td>110.00元</td>
+            <td>110.00元</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 医保报销费用计算公式 -->
+  <div class="formula-header">
+    医保报销费用 =【(甲类药品报销费用+乙类药品报销费用 +丙类药品报销费用 +其他费用)- 起付线 】*报销比例
+  </div>
+
+  <!-- 医院报销数据表格 -->
+  <div class="bg-white rounded-lg shadow p-4 border border-lightGray mb-6">
+    <table class="hospital-table">
+      <thead>
+        <tr class="bg-gray-50">
+          <th>起付线</th>
+          <th>等级线</th>
+          <th>报销比例</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1,000.00元</td>
+          <td>5,000.00元</td>
+          <td class="bg-primary text-white">80%</td>
+        </tr>
+        <tr>
+          <td>5,000.01元</td>
+          <td>10,000.00元</td>
+          <td class="bg-primary text-white">90%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 报销费用和确认按钮 -->
+  <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+    <div class="reimbursement-amount">
+      报销费用：1,256.00元
+    </div>
+    <button class="bg-primary text-white px-6 py-2 rounded-md hover:bg-primary/90 transition-colors">
+      确认
+    </button>
+  </div>
+</body>
+</html>

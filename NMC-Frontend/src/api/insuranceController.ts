@@ -120,3 +120,46 @@ export async function listInsuredPatientsUsingGet(
     ...(options || {}),
   })
 }
+
+/** getHospitalReimbursementList GET /api/insurance/reimbursement/hospital/list */
+export async function getHospitalReimbursementListUsingGet(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.getHospitalReimbursementListUsingGETParams,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponseListHospitalReimbursementVO_>(
+    '/api/insurance/reimbursement/hospital/list',
+    {
+      method: 'GET',
+      params: {
+        // current has a default value: 1
+        current: '1',
+        // hospitalLevel has a default value: 一级医院
+        hospitalLevel: '一级医院',
+
+        // size has a default value: 10
+        size: '10',
+        ...params,
+      },
+      ...(options || {}),
+    }
+  )
+}
+
+/** calculateTotalReimbursement GET /api/insurance/reimbursement/total */
+export async function calculateTotalReimbursementUsingGet(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.calculateTotalReimbursementUsingGETParams,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponseBigdecimal_>('/api/insurance/reimbursement/total', {
+    method: 'GET',
+    params: {
+      // hospitalLevel has a default value: 一级医院
+      hospitalLevel: '一级医院',
+
+      ...params,
+    },
+    ...(options || {}),
+  })
+}

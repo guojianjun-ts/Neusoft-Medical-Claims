@@ -188,6 +188,15 @@ declare namespace API {
     message?: string
   }
 
+  type calculateTotalReimbursementUsingGETParams = {
+    /** hospitalLevel */
+    hospitalLevel?: string
+    /** patientId */
+    patientId: number
+    /** workStatus */
+    workStatus: string
+  }
+
   type checkDiagnosisExistsUsingGETParams = {
     /** diagnosisId */
     diagnosisId: number
@@ -356,6 +365,19 @@ declare namespace API {
   type getDrugInfoByNameUsingGETParams = {
     /** chineseName */
     chineseName: string
+  }
+
+  type getHospitalReimbursementListUsingGETParams = {
+    /** current */
+    current?: number
+    /** hospitalLevel */
+    hospitalLevel?: string
+    /** patientId */
+    patientId: number
+    /** size */
+    size?: number
+    /** workStatus */
+    workStatus: string
   }
 
   type getMedicalServiceByNameUsingGETParams = {

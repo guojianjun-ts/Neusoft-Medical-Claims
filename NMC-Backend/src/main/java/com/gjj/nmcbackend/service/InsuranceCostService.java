@@ -25,4 +25,11 @@ public interface InsuranceCostService {
      * @return 各诊疗类别及其对应费用
      */
     Map<String, BigDecimal> calculateAllCategoryCost(Integer patientId);
+
+
+    /**
+     * 计算总报销费用
+     */
+    BigDecimal calculateTotalReimbursement(Integer patientId, String workStatus, String hospitalLevel);
+
 }

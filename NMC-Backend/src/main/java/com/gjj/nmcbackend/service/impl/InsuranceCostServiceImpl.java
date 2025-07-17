@@ -3,6 +3,7 @@ package com.gjj.nmcbackend.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gjj.nmcbackend.mapper.*;
 import com.gjj.nmcbackend.model.entity.*;
+import com.gjj.nmcbackend.service.HospitalReimbursementService;
 import com.gjj.nmcbackend.service.InsuranceCostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,12 @@ public class InsuranceCostServiceImpl implements InsuranceCostService {
 
     @Autowired
     private MedicalServiceMapper medicalServiceMapper;
+
+    @Autowired
+    private DrugReimbursementMapper drugReimbursementMapper;
+
+    @Autowired
+    private HospitalReimbursementService hospitalReimbursementService;
 
     @Override
     public BigDecimal calculateTotalCost(Integer patientId) {
@@ -107,6 +114,59 @@ public class InsuranceCostServiceImpl implements InsuranceCostService {
         result.put("医疗服务", serviceCost);
 
         return result;
+    }
+
+    @Override
+    public BigDecimal calculateTotalReimbursement(Integer patientId, String workStatus, String hospitalLevel) {
+        // 获取各类药品费用
+        Map<String, BigDecimal> drugCategoryCost = calculateDrugCategoryCost(patientId);
+        // 获取总费用
+        BigDecimal totalCost = calculateTotalCost(patientId);
+        // 获取其他费用（诊疗项目和医疗服务费用）
+        Map<String, BigDecimal> allCategoryCost = calculateAllCategoryCost(patientId);
+        BigDecimal otherCost = allCategoryCost.get("诊疗项目").add(allCategoryCost.get("医疗服务"));
+
+        // 获取药品报销比例
+        List<DrugReimbursement> drugReimbursements = drugReimbursementMapper.selectList(null);
+        Map<String, Integer> drugReimbursementMap = drugReimbursements.stream()
+                .collect(java.util.stream.Collectors.toMap(DrugReimbursement::getDrugReimbursementType, DrugReimbursement::getDrugReimbursementProportion));
+
+        // 计算各类药品报销费用
+        BigDecimal drugReimbursementTotal = BigDecimal.ZERO;
+        for (Map.Entry<String, BigDecimal> entry : drugCategoryCost.entrySet()) {
+            String drugType = entry.getKey();
+            BigDecimal cost = entry.getValue();
+            Integer proportion = drugReimbursementMap.get(drugType);
+            drugReimbursementTotal = drugReimbursementTotal.add(cost.multiply(BigDecimal.valueOf(proportion)).divide(BigDecimal.valueOf(100)));
+        }
+
+        // 获取医院报销信息
+        Integer peopleType = "在职人员".equals(workStatus) ? 1 : 0;
+        List<HospitalReimbursement> hospitalReimbursements = hospitalReimbursementService.list(new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<HospitalReimbursement>()
+                .eq(HospitalReimbursement::getHospitalLevel, hospitalLevel)
+                .eq(HospitalReimbursement::getPeopleType, peopleType)
+                .orderByAsc(HospitalReimbursement::getMinPayLevel));
+
+        // 找到最近的起付线和报销比例
+        HospitalReimbursement selectedReimbursement = null;
+        for (HospitalReimbursement reimbursement : hospitalReimbursements) {
+            if (totalCost.compareTo(BigDecimal.valueOf(reimbursement.getMinPayLevel())) >= 0) {
+                selectedReimbursement = reimbursement;
+            } else {
+                break;
+            }
+        }
+
+        if (selectedReimbursement == null) {
+            return BigDecimal.ZERO;
+        }
+
+        // 计算总报销费用
+        BigDecimal deductible = BigDecimal.valueOf(selectedReimbursement.getMinPayLevel());
+        BigDecimal reimbursementProportion = BigDecimal.valueOf(selectedReimbursement.getPayProportion()).divide(BigDecimal.valueOf(100));
+        BigDecimal totalReimbursement = drugReimbursementTotal.add(otherCost).subtract(deductible).multiply(reimbursementProportion);
+
+        return totalReimbursement.max(BigDecimal.ZERO);
     }
 
     /**

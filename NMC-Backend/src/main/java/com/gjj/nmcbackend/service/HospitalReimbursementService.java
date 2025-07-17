@@ -16,4 +16,10 @@ public interface HospitalReimbursementService extends IService<HospitalReimburse
      * 新增或更新报销比例
      */
     boolean saveOrUpdateReimbursement(HospitalReimbursement entity);
+
+    /**
+     * 按医院等级和人员类型分页查询（返回VO列表）
+     */
+    List<HospitalReimbursementVO> getVOByHospitalLevelAndPeopleType(String hospitalLevel, String peopleTypeDesc, Integer current, Integer size);
+
 }

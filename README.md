@@ -554,277 +554,35 @@ src/Pages/
        }
    ```
 
-5. 它可以根据患者id得到它所有的诊疗项目条目，然后我希望你对他进行修改，使得不需要获取分页后的那么多信息，只需要获取所有诊疗项目的钱各个是多少，可以用一个list<bigDemical>方法存起来，然后通过调用这个方法，我们可以通过得到它所有的价钱数组，然后全部加一起，就是所有诊疗项目的钱了，因此，请你给我写一下呢。
-
-#### 关于字段 
-
-需要通过：insuranceController中的`listDiagnosisCostByPatientIdUsingGet`、`listDrugCostByPatientIdUsingGet`、`listServiceCostByPatientIdUsingGet`，分别根据当前患者的patientId来调用这三个方法，然后分别获取到需要的：
+5. 它可以根据患者id得到它所有的诊疗项目条目，然后我希望你对他进行修改，使得不需要获取分页后的那么多信息，只需要获取所有诊疗项目的钱各个是多少，可以用一个list<bigDemical>方法存起来，然后通过调用这个方法，我们可以通过得到它所有的价钱数组，然后全部加一起，就是所有诊疗项目的钱了，因此，请你给我写一下呢
 
 
 
-页面可用代码（备选方案1）
-
-```vue
-<template>
-  <div class="cost-details-container">
-    <!-- 页面标题 -->
-    <div class="page-header">
-      <h2><DollarOutlined /> 参保人员费用报销详情</h2>
-    </div>
-
-    <!-- 患者基本信息 -->
-    <a-card class="patient-info-card">
-      <a-row :gutter="16">
-        <a-col :span="6">姓名：{{ patientInfo.patientName }}</a-col>
-        <a-col :span="6">性别：{{ patientInfo.gender }}</a-col>
-        <a-col :span="6">住院号：{{ patientInfo.caseNumber }}</a-col>
-        <a-col :span="6">总费用：¥{{ totalCost.toFixed(2) }}</a-col>
-      </a-row>
-    </a-card>
-
-    <!-- 诊断信息 -->
-    <a-card class="diagnosis-info-card" title="诊断信息">
-      <a-row :gutter="16">
-        <a-col :span="8">入院诊断：{{ diagnosis.admission }}</a-col>
-        <a-col :span="8">主要诊断：{{ diagnosis.primary }}</a-col>
-        <a-col :span="8">其他诊断：{{ diagnosis.other }}</a-col>
-      </a-row>
-    </a-card>
-
-    <!-- 图表区域 -->
-    <div class="chart-area">
-      <a-row :gutter="24">
-        <!-- 药品分类饼图 -->
-        <a-col :span="12">
-          <a-card title="药品费用分类">
-            <div id="drug-chart" style="height: 400px;"></div>
-          </a-card>
-        </a-col>
-
-        <!-- 费用分类饼图 -->
-        <a-col :span="12">
-          <a-card title="费用报销分类">
-            <div id="reimbursement-chart" style="height: 400px;"></div>
-          </a-card>
-        </a-col>
-      </a-row>
-    </div>
-  </div>
-</template>
-
-<script setup lang="ts">
-import { ref, onMounted, nextTick } from 'vue';
-import { useRoute } from 'vue-router';
-import * as echarts from 'echarts';
-import { DollarOutlined } from '@ant-design/icons-vue';
-import {
-  getTotalCostUsingGet,
-  getDrugCategoryCostUsingGet,
-  getAllCategoryCostUsingGet
-} from '@/api/insuranceCostController';
-import type {
-  BaseResponseBigdecimal_,
-  BaseResponseMapStringBigdecimal_,
-  PatientRegistration
-} from '@/api/typings.d.ts';
-
-const route = useRoute();
-
-// 患者信息（根据实际接口调整）
-const patientInfo = ref<PatientRegistration>({
-  patientName: '郭建军',
-  gender: '男',
-  caseNumber: '605',
-  // 其他字段...
-});
-
-// 诊断信息（模拟数据，实际应从接口获取）
-const diagnosis = ref({
-  admission: '高血压',
-  primary: '冠心病',
-  other: '糖尿病'
-});
-
-// 费用数据
-const totalCost = ref(0);
-const drugCategoryData = ref<Record<string, number>>({});
-const allCategoryData = ref<Record<string, number>>({});
-
-// 初始化图表
-let drugChart: echarts.ECharts | null = null;
-let reimbursementChart: echarts.ECharts | null = null;
-
-// 获取数据
-const fetchData = async () => {
-  try {
-    const patientId = Number(route.query.patientId);
-
-    // 1. 获取患者基本信息（需替换为实际接口）
-    // patientInfo.value = await getPatientInfo(patientId);
-
-    // 2. 获取总费用
-    const totalRes = await getTotalCostUsingGet({ patientId });
-    if (totalRes.data?.data !== undefined) {
-      totalCost.value = totalRes.data.data;
-    }
-
-    // 3. 获取药品分类数据
-    const drugRes = await getDrugCategoryCostUsingGet({ patientId });
-    if (drugRes.data?.data) {
-      drugCategoryData.value = drugRes.data.data;
-    }
-
-    // 4. 获取全部分类数据
-    const allRes = await getAllCategoryCostUsingGet({ patientId });
-    if (allRes.data?.data) {
-      allCategoryData.value = allRes.data.data;
-    }
-
-    // 5. 渲染图表
-    nextTick(() => {
-      initCharts();
-    });
-  } catch (error) {
-    console.error('获取数据失败:', error);
-  }
-};
-
-// 初始化图表
-const initCharts = () => {
-  // 销毁旧实例
-  if (drugChart) drugChart.dispose();
-  if (reimbursementChart) reimbursementChart.dispose();
-
-  // 药品分类饼图
-  drugChart = echarts.init(document.getElementById('drug-chart'));
-  drugChart.setOption({
-    tooltip: {
-      trigger: 'item',
-      formatter: '{b}: ¥{c} ({d}%)'
-    },
-    legend: {
-      orient: 'vertical',
-      left: 'left',
-      data: Object.keys(drugCategoryData.value)
-    },
-    series: [{
-      name: '药品分类',
-      type: 'pie',
-      radius: '50%',
-      data: Object.entries(drugCategoryData.value).map(([name, value]) => ({
-        name,
-        value
-      })),
-      emphasis: {
-        itemStyle: {
-          shadowBlur: 10,
-          shadowOffsetX: 0,
-          shadowColor: 'rgba(0, 0, 0, 0.5)'
-        }
-      },
-      label: {
-        formatter: '{b}: {d}%'
-      }
-    }]
-  });
-
-  // 费用分类饼图
-  reimbursementChart = echarts.init(document.getElementById('reimbursement-chart'));
-  reimbursementChart.setOption({
-    tooltip: {
-      trigger: 'item',
-      formatter: '{b}: ¥{c} ({d}%)'
-    },
-    legend: {
-      orient: 'vertical',
-      left: 'left',
-      data: Object.keys(allCategoryData.value)
-    },
-    series: [{
-      name: '费用分类',
-      type: 'pie',
-      radius: '50%',
-      data: Object.entries(allCategoryData.value).map(([name, value]) => ({
-        name,
-        value
-      })),
-      emphasis: {
-        itemStyle: {
-          shadowBlur: 10,
-          shadowOffsetX: 0,
-          shadowColor: 'rgba(0, 0, 0, 0.5)'
-        }
-      },
-      label: {
-        formatter: '{b}: {d}%'
-      }
-    }]
-  });
-
-  // 响应式调整
-  window.addEventListener('resize', function() {
-    drugChart?.resize();
-    reimbursementChart?.resize();
-  });
-};
-
-// 页面加载时获取数据
-onMounted(() => {
-  fetchData();
-});
-</script>
-
-<style scoped>
-.cost-details-container {
-  padding: 24px;
-  background-color: #fff;
-  min-height: 100vh;
-}
-
-.page-header {
-  margin-bottom: 24px;
-}
-
-.page-header h2 {
-  font-size: 20px;
-  font-weight: 600;
-  color: #1890ff;
-  margin: 0;
-  display: flex;
-  align-items: center;
-}
-
-.page-header .anticon {
-  margin-right: 8px;
-}
-
-.patient-info-card,
-.diagnosis-info-card {
-  margin-bottom: 24px;
-}
-
-.chart-area {
-  margin-top: 24px;
-}
-
-.ant-card {
-  border-radius: 8px;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
-}
-
-.ant-card-head {
-  font-weight: 500;
-  border-bottom: none;
-}
-
-.ant-card-body {
-  padding: 16px;
-}
-</style>
-
-```
 
 
+### 2.参保人员费用详情（src/pages/insurance-center/Reimbursement/CostDetails.vue）：
+
+前端结构：
+
+- 第一行是个标题：参保人员费用报销详情
+
+- 第二行是由参保人员的多个字段组成的一行，例如：
+
+  - 姓名：
+  - 性别：
+  - 住院号：以上姓名`patientName`、性别`gender`、住院号`caseNumber`字段通过`src/api/patientRegistrationController.ts`中的`getCurrentPatientUsingGet`可以获得
+
+  - 总费用：调用获取参保人员总费用的方法得到：`src/api/insuranceCostController.ts`中的`getTotalCostUsingGet`方法
+
+- 第三行是由参保人员的多个诊断组成的：入院诊断、主要诊断和其它诊断：通过`src/api/insuranceController.ts`中的`listDiseaseByPatientIdUsingGet`，并对 `BaseResponsePagePatientDiseaseVO_.PagePatientDiseaseVO_.PatientDiseaseVO[].diseaseType（1/2/3）`进行类型判断 可以获得三者有什么
+
+- 页面接下来的部分中，左侧是药品费用图表（讲述着参保人员甲类、乙类、丙类药品各个的总金额和占比）：通过调用`src/api/insuranceCostController.ts`中的`getDrugCategoryCostUsingGet`可以获得以下的数据，然后我需要你用ECharts图表对它进行可视化饼状图展示
+
+  
+
+- 右侧是报销详情图表（讲述着参保人员的保险药品、诊疗项目、医疗服务各个的总金额和百分比）：通过调用`src/api/insuranceCostController.ts`中的`getAllCategoryCostUsingGet`可以获得以下的数据，然后我需要你用ECharts图表对它进行可视化饼状图展示。
+
+- 请你给我写一下这个前端页面呢
 
 
 
@@ -832,20 +590,80 @@ onMounted(() => {
 
 1. 前端：右上角：返回按钮
    1. 第一行：一个标题：参保人员费用报销
-   2. 第二行：显示着参保人员的姓名、人员类别、结算类别、总费用
+
+   2. 第二行：显示着参保人员的姓名`patientName`、人员类别`workStatus`、结算类别`paymentType`、总费用（可以通过调用`src/api/insuranceCostController.ts`中的`getTotalCostUsingGet`方法获取）
+
    3. 接下来是四个卡片：
       1. 第一个卡片：
-         - 第一行：药品类型（其实就是甲类药品）：报销比例 ，该类药品总费用
-         - 第二行及之后：一个小表格，有药品名称，单价，价格三列
+         - 第一行：药品类型（其实就是甲类药品）：报销比例（可以通过`src/api/drugReimbursementController.ts`中的 `listAllReimbursementUsingGet`方法获得三种类型的报销比例<List<DrugReimbursement>>类型的）返回数据例如：
+         
+           ```
+           {
+             "code": 0,
+             "data": [
+               {
+                 "id": 1,
+                 "drugReimbursementType": "甲类",
+                 "drugReimbursementProportion": 100,
+                 "drugReimbursementInfo": "基本医疗范畴已全部覆盖，100％可以报销",
+                 "drugStatus": 1
+               },
+               {
+                 "id": 2,
+                 "drugReimbursementType": "乙类",
+                 "drugReimbursementProportion": 80,
+                 "drugReimbursementInfo": "基本医疗范畴未全部覆盖，一般需要个人自付部分",
+                 "drugStatus": 1
+               },
+               {
+                 "id": 3,
+                 "drugReimbursementType": "丙类",
+                 "drugReimbursementProportion": 10,
+                 "drugReimbursementInfo": "基本医疗未覆盖",
+                 "drugStatus": 1
+               }
+             ],
+             "message": "ok"
+           }
+           ```
+         
+           ，该类药品总费用通过`src/api/insuranceCostController.ts`中的`getDrugCategoryCostUsingGet`方法获得各个类药品的花费情况：
+           返回数据例如：
+         
+           ```
+           {
+             "code": 0,
+             "data": {
+               "甲类": 20.13,
+               "乙类": 45.72,
+               "丙类": 6703.99
+             },
+             "message": "ok"
+           }
+           ```
+         
+         - 第二行及之后：一个小表格，有患者购买的该类药品名称，单价，价格三列
       2. 第二个卡片：同第一个卡片（乙类药品），根据药品类型不同而不同
       3. 第三个卡片：同第一个卡片（丙类药品），根据药品类型不同而不同
       4. 第四个卡片：
          - 第一行：写着 其它标题：诊疗项目和医疗服务的总费用
          - 第二行及之后：一个小表格有该参保人员的项目名称，单价，价格
+      
    4. 四个小卡片之后，是一个横线标题写着：医保报销费用 = 【( 甲类药品报销费用 + 乙类药品报销费用 + 丙类药品报销费用 + 其他费用) - 起付线 】* 报销比例
+   
    5. 接下来是展示医院报销数据的表格：
       1. 有三列分别是：起付线（minPayLevel），等级线（maxPayLevel），报销比例（payProportion要自己前端加个%）
-   6. 最后一行左侧是 报销费用：患者的总报销费用，右侧是 确认的按钮（但不需要有任何的动作）
+         - 这个需要根据患者的工作状态`workStatus（在职或退休两个字段）`，并结合医院类型`hospitalLevel（默认输入"一级医院"）`，与`peopleTypeDesc（退休人员或在职人员两个字段）`进行分页查询展示出来。（我刚写好这个接口，是`insuranceController.ts`中的`getHospitalReimbursementListUsingGet`）
+   
+   6. 最后一行左侧是 报销费用：患者的总报销费用，右侧是 确认的按钮（但不需要有任何的动作）（目前这个接口我开发失败了，请）
+   
+      1. 关于总报销费用，需要用那个横线挑剔的计算公式来进行计算
+   
+2. 后端：因此根据以上前端的分析，我后端可能是需要去建立两个接口：
+
+   1. 根据患者id的工作状态`workStatus`去匹配医院类型`hospitalLevel`与`peopleTypeDesc`，进行一个分页查询
+   2. 一个计算总报销费用的接口：医保报销费用 = 【( 甲类药品报销费用 + 乙类药品报销费用 + 丙类药品报销费用（可以使用insuranceCostService.calculateTotalCost(patientId)获得各个类药品的花费费用再乘以对应药品类型报销比例就是各个类别药品的报销费用了） + 其他费用（可以使用`insuranceCostService.calculateAllCategoryCost(patientId)`方法获取药品、诊疗项目、医疗服务减去药品的费用获得二者相加获得）) - 起付线 （总费用离下面最近的起付线）】* 报销比例
+
 
 
 
@@ -882,3 +700,43 @@ Todo:
 3.组长收齐后以小组为单位提交，截止时间为本周四晚12点，其中组长单独将“医疗保险报销项目XXX软件/项目/系统详细设计说明书”抽离出来放入提交的压缩文件中。
 
 ```
+
+
+
+### 后端技术框架
+
+|     技术框架名称      | 作用                                                   |
+| :-------------------: | ------------------------------------------------------ |
+|  Spring Boot (2.7.6)  | 提供核心框架支持，简化配置和开发流程                   |
+|    Spring Web MVC     | 处理HTTP请求和响应，实现RESTful API                    |
+| MyBatis-Plus (3.5.9)  | 增强型ORM框架，简化数据库操作，提供CRUD封装            |
+| MyBatis-Plus 逻辑删除 | 实现软删除功能（通过isDelete字段标记）                 |
+| MyBatis-Plus 分页插件 | 简化分页查询实现                                       |
+|   MySQL Connector/J   | 提供MySQL数据库连接支持                                |
+|    Knife4j (4.4.0)    | 生成和展示API文档（Swagger增强版）                     |
+|        Lombok         | 通过注解自动生成getter/setter/构造方法等，减少样板代码 |
+|    Hutool (5.8.26)    | 提供各种Java工具类集合                                 |
+|      Spring AOP       | 支持面向切面编程，可用于日志、权限等横切关注点         |
+| Spring Boot DevTools  | 开发时热部署支持                                       |
+|         Maven         | 项目构建和依赖管理                                     |
+
+
+
+
+
+## 前端端技术框架
+
+|   技术框架名称    | 作用                                                       |
+| :---------------: | ---------------------------------------------------------- |
+|       Vue 3       | 前端核心框架，提供响应式组件化开发能力                     |
+|    TypeScript     | JavaScript超集，提供静态类型检查，提高代码健壮性和可维护性 |
+|       Pinia       | Vue状态管理库，用于集中管理应用状态                        |
+|    Vue Router     | Vue官方路由管理器，实现单页面应用的路由控制                |
+|  Ant Design Vue   | 企业级UI组件库，提供丰富的预设组件和设计规范               |
+|      ECharts      | 百度开源可视化库，用于实现各类数据图表展示                 |
+|       Axios       | HTTP客户端，处理前后端数据请求和响应                       |
+|       Vite        | 新一代前端构建工具，提供极快的开发服务器启动和热更新       |
+|      Vue-TSC      | Vue TypeScript类型检查工具，保证类型安全                   |
+| ESLint + Prettier | 代码质量检查与格式化工具，保持代码风格统一                 |
+|   Vite DevTools   | Vue开发调试工具，提供组件树查看、状态调试等功能            |
+|     Moment.js     | 日期处理库，提供日期格式化、计算等功能                     |

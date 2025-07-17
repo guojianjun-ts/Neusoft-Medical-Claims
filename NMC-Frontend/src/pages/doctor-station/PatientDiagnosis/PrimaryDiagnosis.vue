@@ -4,6 +4,10 @@
     <div class="page-title">
       <FileAddOutlined />
       主要诊断患者：{{ patientName || '未选择患者' }}
+      <a-button type="primary" @click="goBack">
+        <template #icon><arrow-left-outlined /></template>
+        返回
+      </a-button>
     </div>
 
     <!-- 药品处方医嘱标题 -->
@@ -80,7 +84,8 @@
 <script setup lang="ts">
 import { ref, onMounted, reactive, computed } from 'vue';
 import { useRoute } from 'vue-router';
-import { FileAddOutlined, SearchOutlined } from '@ant-design/icons-vue'
+import { useRouter } from 'vue-router'
+import { ArrowLeftOutlined,FileAddOutlined, SearchOutlined } from '@ant-design/icons-vue'
 import { message } from 'ant-design-vue';
 import {
   listDiseaseByPageUsingGet,
@@ -100,6 +105,12 @@ import type {
 // 路由实例
 const route = useRoute();
 
+// 添加路由
+const router = useRouter();
+// 返回上一页
+const goBack = () => {
+  router.go(-1)
+}
 // 从路由参数中获取疾病信息
 const patientId = computed(() => Number(route.query.patientId));
 const patientName = computed(() => route.query.patientName as string || '');
